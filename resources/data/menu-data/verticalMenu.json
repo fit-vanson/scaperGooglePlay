@@ -1,0 +1,42 @@
+{
+  "menu": [
+    {
+      "name": "Dashboards",
+      "badgeClass": "badge badge-light-warning badge-pill ml-auto mr-1",
+      "icon": "home",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "dashboard/analytics",
+          "name": "Analytics",
+          "icon": "circle",
+          "slug": "dashboard-analytics"
+        },
+        {
+          "url": "/",
+          "name": "eCommerce",
+          "icon": "circle",
+          "slug": "dashboard-ecommerce"
+        }
+      ]
+    },
+
+    {
+      "navheader": "Market",
+      "slug": ""
+    },
+
+    {
+      "url": "googleplay/",
+      "name": "Google Play",
+      "icon": "box",
+      "slug": "googleplay-index"
+    },
+    {
+      "url": "googleplay/package",
+      "name": "Package",
+      "icon": "box",
+      "slug": "googleplay-package"
+    }
+  ]
+}
