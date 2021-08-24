@@ -139,7 +139,7 @@ class GooglePlayController extends Controller
             $data_arr[] = array(
                 "idr" => '',
                 "id" => $record->id,
-                "logo" => '<img class="rounded mx-auto d-block" width="100px" height="100px" src="'.$record->logo.'">',
+                "logo" => '<a href="http://play.google.com/store/apps/details?id='.$record->appId.'&hl=en" target="_blank" ><img class="rounded mx-auto d-block" width="100px" height="100px" src="'.$record->logo.'"></a>',
                 "appId"=>$record->appId,
                 "name"=>$record->name,
                 "installs" => number_format($record->installs),
