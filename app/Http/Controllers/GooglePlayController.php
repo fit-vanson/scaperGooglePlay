@@ -34,27 +34,34 @@ class GooglePlayController extends Controller
         ini_set('max_execution_time',300);
         $input_search = $request->input_search;
         $gplay = new GPlayApps();
-        $appsInfo = $gplay->search($input_search,200);
+        $appsInfo = $gplay->search($input_search,250);
         foreach ($appsInfo as $appInfo){
             $appInfo =  $gplay->getAppInfo($appInfo->getId());
+            $screenshots = $appInfo->getScreenshots();
+            $url_screenshot = [];
+            foreach ($screenshots as $screenshot){
+                $url_screenshot[] = $screenshot->getUrl();
+            }
+            $url_screenshot = json_encode($url_screenshot);
             SaveTemp::updateOrCreate(
                 [
-                    'logo' => $appInfo->getIcon(),
+                    'logo' => $appInfo->getIcon()->getUrl(),
                     'appId' => $appInfo->getId(),
                     'name' => $appInfo->getName(),
-                    'released' => $appInfo->getReleased(),
-                    'updated' => $appInfo->getUpdated(),
-                    'score' => $appInfo->getScore(),
+                    'cover' => $appInfo->getCover(),
+                    'screenshots' =>$url_screenshot,
                     'installs' => $appInfo->getInstalls(),
-                    'appVersion' => $appInfo->getAppVersion(),
+                    'score' => $appInfo->getScore(),
                     'numberVoters' => $appInfo->getNumberVoters(),
                     'numberReviews' => $appInfo->getNumberReviews(),
+                    'offersIAPCost' => $appInfo->isContainsIAP(),
+                    'containsAds' => $appInfo->isContainsAds(),
                 ]);
         }
         return response()->json(['success'=>'Thành công.']);
     }
     public function getIndex(Request $request){
-
+        ini_set('max_execution_time',1000);
         $draw = $request->get('draw');
         $start = $request->get("start");
         $rowperpage = $request->get("length"); // Rows display per page
@@ -77,7 +84,8 @@ class GooglePlayController extends Controller
             ->orwhere('appId', 'like', '%' .$searchValue . '%')
             ->count();
         // Fetch records
-        $records = SaveTemp::orderBy($columnName,$columnSortOrder)
+        $records = SaveTemp::with('checkExist')->orderBy($columnName,$columnSortOrder)
+
             ->where('appId', 'like', '%' .$searchValue . '%')
             ->orwhere('name', 'like', '%' .$searchValue . '%')
             ->select('*')
@@ -86,9 +94,16 @@ class GooglePlayController extends Controller
             ->get();
         $data_arr = array();
         foreach($records as $record){
-            $check = AppsInfo::where('appId',$record->appId)->first();
-            if(isset($check)){
-                if($check->status == 1){
+            if($record->checkExist != null){
+                SaveTemp::updateOrCreate(
+                    [
+                        'appId' => $record->appId,
+                    ],
+                    [
+                        'exist' => 1
+                    ]
+                );
+                if($record->checkExist->status == 1){
                      $action = '<div class="avatar avatar-status bg-light-warning">
                                     <span class="avatar-content">
                                     <a href="javascript:void(0)" onclick="unfollowApp('.$record->id.')" class="btn-flat-warning">
@@ -99,14 +114,14 @@ class GooglePlayController extends Controller
                 }else{
                     $action = ' <div class="avatar avatar-status bg-light-secondary">
                                     <span class="avatar-content">
-                                       <a href="javascript:void(0)" onclick="followApp('.$record->id.')" class="btn-flat-secondary">
+                                       <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-secondary followApp">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
                                     </a>
                                 </div>';
                 }
                 $action .= ' <div class="avatar avatar-status bg-light-info">
                                  <span class="avatar-content">
-                                    <a href="googleplay/detail?id='.$record->appId.'" class="btn-flat-info">
+                                    <a href="../googleplay/detail?id='.$record->appId.'" class="btn-flat-info">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                     </a>
                                 </span>
@@ -115,12 +130,12 @@ class GooglePlayController extends Controller
             else{
                 $action = ' <div class="avatar avatar-status bg-light-secondary">
                                     <span class="avatar-content">
-                                    <a href="javascript:void(0)" onclick="followApp('.$record->id.')" class="btn-flat-secondary">
+                                    <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-secondary followApp">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
                                     </a>
                                 </div>';
             }
-
+//            dd(json_decode($record->screenshots,true));
             $data_arr[] = array(
                 "idr" => '',
                 "id" => $record->id,
@@ -132,6 +147,10 @@ class GooglePlayController extends Controller
                 "numberReviews" => number_format($record->numberReviews),
                 "score" => number_format($record->score,2),
                 "action" => $action,
+                "cover" =>$record->cover,
+                "offersIAPCost" =>$record->offersIAPCost,
+                "containsAds" =>$record->containsAds,
+                "screenshots" =>json_decode($record->screenshots,true),
             );
         }
         $response = array(
@@ -142,7 +161,6 @@ class GooglePlayController extends Controller
         );
         echo json_encode($response);
     }
-
     public function cronApps(Request $request){
         ini_set('max_execution_time',500);
         $time_to_cron = Carbon::now()->today();
@@ -187,83 +205,36 @@ class GooglePlayController extends Controller
     public function followApp(Request $request){
         ini_set('max_execution_time',500);
         $gplay = new GPlayApps();
-        if(isset($request->checkbox)){
-            $appsInfo = $gplay->getAppsInfo($request->checkbox);
-            foreach ($appsInfo as $appInfo){
-                $checkApp = AppsInfo::where('appID',$appInfo->getId())->first();
-                $reviews = $gplay->getReviews($appInfo->getId(),500);
-                $infoReview = [];
-                $data =[];
-                $url_screenshot = [];
-                foreach ($reviews as $review){
-                    $infoReview[] =[
-                        'id' => $review->getId(),
-                        'userName' => $review->getUserName(),
-                        'text' => $review->getText(),
-                        'reply' => $review->getReply(),
-                        'date' => $review->getDate()->getTimestamp(),
-                        'score' => $review->getScore(),
-                        'countLikes' => $review->getCountLikes(),
-                        'avatar' => $review->getAvatar()->getUrl(),
-                    ];
-                }
-                $data [] = [
-                    'date' => Carbon::now()->format('Y-m-d'),
-                    'size' => $appInfo->getSize(),
-                    'appVersion' => $appInfo->getAppVersion(),
-                    'installs' => $appInfo->getInstalls(),
-                    'score' => $appInfo->getScore(),
-                    'numberVoters' => $appInfo->getNumberVoters(),
-                    'numberReviews' => $appInfo->getNumberReviews(),
-                    'histogramRating' => $appInfo->getHistogramRating(),
-                    'updated' => $appInfo->getUpdated(),
-                ];
-                $infoReview = json_encode($infoReview);
-                if(isset($checkApp)){
-                    $dataCheck = json_decode($checkApp->data,true);
-                    if($dataCheck[0]['date'] != Carbon::now()->format('Y-m-d')){
-                        $data = array_merge($data, $dataCheck);
-                    }else{
-                        $data= array_merge($dataCheck);
-                    }
 
-                }
-                $data = json_encode($data);
-                $screenshots = $appInfo->getScreenshots();
+        if(is_array($request->id)){
+            $appId = $request->id;
+            $appsInfo = $gplay->getAppsInfo($appId);
 
-                foreach ($screenshots as $screenshot){
-                    $url_screenshot[] = $screenshot->getUrl();
-                }
-                $url_screenshot = json_encode($url_screenshot);
 
-                AppsInfo::updateOrCreate(
-                    [
-                        'appId' => $appInfo->getId(),
-                    ],
-                    [
-                        'logo' => $appInfo->getIcon()->getUrl(),
-                        'appId' => $appInfo->getId(),
-                        'name' => $appInfo->getName(),
-                        'privacyPoliceUrl' => $appInfo->getPrivacyPoliceUrl(),
-                        'cover' => $appInfo->getCover()->getUrl(),
-                        'screenshots' => $url_screenshot,
-                        'summary' => $appInfo->getSummary(),
-                        'description' => $appInfo->getDescription(),
-                        'released' => $appInfo->getReleased(),
-                        'data' => $data,
-                        'reviews' => $infoReview,
-                        'offersIAPCost' => $appInfo->isContainsIAP(),
-                        'containsAds' => $appInfo->isContainsAds(),
-                        'status' => 1
-                    ]);
-            }
         }else{
-            $appInfo = SaveTemp::where('id',$request->id)->first();
-            $checkApp = AppsInfo::where('appID',$appInfo->appId)->first();
-            $appInfo = $gplay->getAppInfo($appInfo->appId);
+            $appId[] = $request->id;
+            $appsInfo = $gplay->getAppsInfo($appId);
+        }
+        $checkExist = AppsInfo::whereIn('appId',$appId)->get();
+        $checkExist = json_decode(json_encode($checkExist), True);
+
+
+        $infoReview = [];
+        $data =[];
+        $url_screenshot = [];
+        foreach ($appsInfo as $appInfo){
+            $data[]  = [
+                'date' => Carbon::now()->format('Y-m-d'),
+                'size' => $appInfo->getSize(),
+                'appVersion' => $appInfo->getAppVersion(),
+                'installs' => $appInfo->getInstalls(),
+                'score' => $appInfo->getScore(),
+                'numberVoters' => $appInfo->getNumberVoters(),
+                'numberReviews' => $appInfo->getNumberReviews(),
+                'histogramRating' => $appInfo->getHistogramRating(),
+                'updated' => $appInfo->getUpdated(),
+            ];
             $reviews = $gplay->getReviews($appInfo->getId(),500);
-            $infoReview = [];
-            $data =[];
             foreach ($reviews as $review){
                 $infoReview[] =[
                     'id' => $review->getId(),
@@ -276,32 +247,23 @@ class GooglePlayController extends Controller
                     'avatar' => $review->getAvatar()->getUrl(),
                 ];
             }
-            $data [] = [
-                'date' => Carbon::now()->format('Y-m-d'),
-                'size' => $appInfo->getSize(),
-                'appVersion' => $appInfo->getAppVersion(),
-                'installs' => $appInfo->getInstalls(),
-                'score' => $appInfo->getScore(),
-                'numberVoters' => $appInfo->getNumberVoters(),
-                'numberReviews' => $appInfo->getNumberReviews(),
-                'histogramRating' => $appInfo->getHistogramRating(),
-                'updated' => $appInfo->getUpdated(),
-            ];
-            $infoReview = json_encode($infoReview);
-            if(isset($checkApp)){
-                $dataCheck = json_decode($checkApp->data,true);
-                if($dataCheck[0]['date'] != Carbon::now()->format('Y-m-d')){
+            $screenshots = $appInfo->getScreenshots();
+            foreach ($screenshots as $screenshot){
+                $url_screenshot[] = $screenshot->getUrl();
+            }
+            $check = array_search($appInfo->getId(), array_column($checkExist, 'appId'));
+            if($check !== false){
+                $dataCheck = json_decode($checkExist[$check]['data'],true);
+                $searchDate = array_search(Carbon::now()->format('Y-m-d'),array_column($dataCheck, 'date'));
+                if($searchDate == false){
                     $data = array_merge($data, $dataCheck);
                 }else{
                     $data= array_merge($dataCheck);
                 }
             }
-            $data = json_encode($data);
-            $screenshots = $appInfo->getScreenshots();
-            foreach ($screenshots as $screenshot){
-                $url_screenshot[] = $screenshot->getUrl();
-            }
-            $url_screenshot = json_encode($url_screenshot);
+            $json_data = json_encode($data);
+            $json_review = json_encode($infoReview);
+            $json_screenshot = json_encode($url_screenshot);
             AppsInfo::updateOrCreate(
                 [
                     'appId' => $appInfo->getId(),
@@ -312,18 +274,17 @@ class GooglePlayController extends Controller
                     'name' => $appInfo->getName(),
                     'privacyPoliceUrl' => $appInfo->getPrivacyPoliceUrl(),
                     'cover' => $appInfo->getCover()->getUrl(),
-                    'screenshots' => $url_screenshot,
+                    'screenshots' => $json_screenshot,
                     'summary' => $appInfo->getSummary(),
                     'description' => $appInfo->getDescription(),
                     'released' => $appInfo->getReleased(),
-                    'data' => $data,
-                    'reviews' => $infoReview,
+                    'data' => $json_data,
+                    'reviews' => $json_review,
                     'offersIAPCost' => $appInfo->isContainsIAP(),
                     'containsAds' => $appInfo->isContainsAds(),
                     'status' => 1
                 ]);
         }
-
         return response()->json(['success'=>'App đã được Follow.']);
     }
     public function unfollowApp(Request $request){
@@ -375,4 +336,12 @@ class GooglePlayController extends Controller
         return response()->json([$histogramRating,$installs,$votes,$reviews]);
 
     }
+    public function chooseApp(Request $request)
+    {
+        $appsChoose = $request->checkbox;
+        return view('content.googleplay.choose',[
+            'appsChoose' => $appsChoose
+        ]);
+    }
+
 }

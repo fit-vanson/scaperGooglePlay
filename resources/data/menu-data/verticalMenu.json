@@ -30,13 +30,22 @@
       "url": "googleplay/",
       "name": "Google Play",
       "icon": "box",
-      "slug": "googleplay-index"
-    },
-    {
-      "url": "googleplay/package",
-      "name": "Package",
-      "icon": "box",
-      "slug": "googleplay-package"
+      "slug": "",
+      "submenu": [
+        {
+          "url": "googleplay/",
+          "name": "Search App",
+          "icon": "circle",
+          "slug": "googleplay-index"
+        },
+        {
+          "url": "googleplay/package",
+          "name": "Filter App",
+          "icon": "circle",
+          "slug": "googleplay-package"
+        }
+      ]
     }
+
   ]
 }

@@ -104,8 +104,8 @@
     });
 
     var table=$('.datatables-basic').DataTable({
-      displayLength: 200,
-      lengthMenu: [20, 50, 100, 200],
+      displayLength: 250,
+      lengthMenu: [20, 50, 100, 250, 500],
       serverSide: true,
       processing: true,
       ajax: {
@@ -114,7 +114,7 @@
       },
       columns: [
         { data: 'idr' },
-        { data: 'appId' },
+        { data: 'id' },
         { data: 'appId' },
         { data: 'logo' }, // used for sorting so will hide this column
         { data: 'name' },
@@ -143,9 +143,9 @@
           orderable: false,
           responsivePriority: 3,
           render: function (data, type, full, meta) {
-
+            console.log(full)
             return (
-                    '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="'+full.appId+'" name="checkbox[]" id="checkbox' +
+                    '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="'+[full.appId]+'" name="id[]" id="checkbox' +
                     data +
                     '" /><label class="custom-control-label" for="checkbox' +
                     data +
@@ -276,13 +276,18 @@
       }
     });
     $('div.head-label').html('<h6 class="mb-0">Tìm kiếm Ứng dụng</h6>');
-    function followApp(id) {
-      $.post('{{asset('googleplay/followApp')}}?id='+id,function (data)
+
+    $(document).on('click','.followApp', function (data) {
+      const row = table.row(data.target.closest('tr'));
+      const rowData = row.data();
+      console.log(rowData)
+      $.post('{{asset('googleplay/followApp')}}?id='+rowData.appId,function (data)
       {
         $('.modal').modal('hide');
         table.draw();
       })
-    }
+    });
+
     $('#searchAppForm').on('submit',function (event){
       event.preventDefault();
       $.ajax({

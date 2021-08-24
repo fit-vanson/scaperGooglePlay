@@ -10,4 +10,5 @@ class AppsInfo extends Model
     use HasFactory;
     protected $table = 'tbl_apps_info';
     protected $guarded = [];
+
 }

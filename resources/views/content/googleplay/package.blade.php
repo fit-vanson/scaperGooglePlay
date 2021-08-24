@@ -41,20 +41,23 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <form id="checkAppForm" name="checkAppForm">
+            <form id="checkAppForm" method="post" action="{{route('googleplay-chooseApp')}}" name="checkAppForm">
+              @csrf
               <table class="datatables-basic table">
                 <thead>
                 <tr>
                   <th></th>
                   <th></th>
                   <th>AppID</th>
-                  <th style=" width:5%">Logo</th>
-                  <th style=" width:15%">Name</th>
-                  <th style=" width:15%">Installs</th>
-                  <th style=" width:15%">Votes</th>
-                  <th style=" width:15%">Reviews</th>
-                  <th style=" width:15%">Score</th>
-                  <th style=" width:10%">Action</th>
+                  <th>Logo</th>
+                  <th style="width: 250px">Banner</th>
+                  <th>IAP</th>
+                  <th>Ads</th>
+                  <th>Installs</th>
+                  <th>Votes</th>
+                  <th>Reviews</th>
+                  <th>Score</th>
+                  <th>Action</th>
                 </tr>
                 </thead>
               </table>
@@ -69,6 +72,32 @@
       </div>
     </div>
   </section>
+
+  <div class="modal fade" id="global-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <!--Modal Content-->
+      <div class="modal-content">
+        <section id="component-swiper-coverflow">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Screenshot</h4>
+            </div>
+            <div class="card-body">
+              <div class="swiper-coverflow swiper-container">
+                <div class="swiper-wrapper" id="screenshot_img">
+                  <div class="swiper-slide" >
+                    <img class="img-fluid" src="" alt="banner" />
+                  </div>
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
 
 
 
@@ -92,6 +121,7 @@
   <script src="{{ asset(mix('vendors/js/pickers/flatpickr/flatpickr.min.js')) }}"></script>
 
   <script src="{{ asset(mix('vendors/js/extensions/swiper.min.js')) }}"></script>
+
 @endsection
 
 @section('page-script')
@@ -108,8 +138,8 @@
     });
 
     var table=$('.datatables-basic').DataTable({
-      displayLength: 20,
-      lengthMenu: [20,50, 100, 200, 500],
+      displayLength: 250,
+      lengthMenu: [20,50, 100, 250, 500],
       serverSide: true,
       processing: true,
       ajax: {
@@ -121,7 +151,9 @@
         { data: 'appId' },
         { data: 'appId' },
         { data: 'logo' }, // used for sorting so will hide this column
-        { data: 'name' },
+        { data: 'cover' },
+        { data: 'offersIAPCost' },
+        { data: 'containsAds' },
         { data: 'installs' },
         { data: 'numberVoters' },
         { data: 'numberReviews' },
@@ -147,7 +179,6 @@
           orderable: false,
           responsivePriority: 3,
           render: function (data, type, full, meta) {
-
             return (
                     '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="'+full.appId+'" name="checkbox[]" id="checkbox' +
                     data +
@@ -167,28 +198,34 @@
           responsivePriority: 1,
           render: function (data, type, full, meta) {
             // Creates full output for row
-            return '<div class="sliderFrame">'+
-                    '<div id="slider">'+
-                    '<a href="http://www.google.com" target="_blank">'+
-                    '<img src="images/image-slider-1.jpg" alt="Welcome to Google"  />'+
-                    '</a>'+
-            '<img src="images/image-slider-2.jpg" alt="" width="1200px"/>'+
-            '<img src="images/image-slider-3.jpg" alt="Pure Javascript. No jQuery. No flash." />'+
-          '  <img src="images/image-slider-4.jpg" alt="#htmlcaption" />'+
-            '<img src="images/image-slider-5.jpg"/>'+
-          '</div>'+
-
-          '</div>';
+            return '<div class="swiper-default swiper-container banner_click">'+
+                      '<div class="swiper-wrapper">'+
+                        '<div class="swiper-slide">'+
+                          '<img class="img-fluid" style="height: 100px;" src="'+full.cover+'" alt="banner" />'+
+                        '</div>'+
+                      '</div>'+
+                      '</div>';
+          }
+        },
+        {
+          targets: [5,6],
+          responsivePriority: 1,
+          render: function (data, type, full, meta) {
+            if(data == 1){
+              return  '<div class="badge badge-light-success">Có</div>';
+            } else {
+              return '<div class="badge badge-light-danger">Không</div>';
+            }
           }
         },
         {
           responsivePriority: 4,
-          targets: 8
+          targets: 11
         },
 
 
       ],
-      order: [[4, 'desc']],
+      order: [[7, 'desc']],
       dom:
               '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
 
@@ -280,14 +317,34 @@
         }
       }
     });
+
+    table.on('click', '.banner_click', e=> {
+      e.preventDefault();
+      const row = table.row(e.target.closest('tr'));
+      const rowData = row.data();
+      let a = '';
+      rowData.screenshots.forEach(function(item, index, array) {
+
+        a += '<div class="swiper-slide">'+
+                        '<img class="img-fluid screenshot_img" src="'+item+'" alt="banner" />'+
+                '</div>';
+      })
+      document.getElementById("screenshot_img").innerHTML = a;
+      $('#global-modal').modal('show');
+
+
+    });
     $('div.head-label').html('<h6 class="mb-0">Tìm kiếm Ứng dụng</h6>');
-    function followApp(id) {
-      $.post('{{asset('googleplay/followApp')}}?id='+id,function (data)
+    $(document).on('click','.followApp', function (data) {
+      const row = table.row(data.target.closest('tr'));
+      const rowData = row.data();
+      console.log(rowData)
+      $.post('{{asset('googleplay/followApp')}}?id='+rowData.appId,function (data)
       {
         $('.modal').modal('hide');
         table.draw();
       })
-    }
+    });
     $('#searchAppForm').on('submit',function (event){
       event.preventDefault();
       $.ajax({
@@ -300,18 +357,18 @@
         },
       });
     });
-    $('#checkAppForm').on('submit',function (event){
-      event.preventDefault();
-      $.ajax({
-        data: $('#checkAppForm').serialize(),
-        url: "{{ route('googleplay-followApp') }}",
-        type: "post",
-        dataType: 'json',
-        success: function (data) {
-          table.draw();
-        },
-      });
-    });
+    {{--$('#checkAppForm').on('submit',function (event){--}}
+    {{--  event.preventDefault();--}}
+    {{--  $.ajax({--}}
+    {{--    data: $('#checkAppForm').serialize(),--}}
+    {{--    url: "{{ route('googleplay-chooseApp') }}",--}}
+    {{--    type: "post",--}}
+    {{--    dataType: 'json',--}}
+    {{--    success: function (data) {--}}
+    {{--      location.href = "http://127.0.0.1:8000/googleplay/chooseApp"--}}
+    {{--    },--}}
+    {{--  });--}}
+    {{--});--}}
     $(document)
             .ajaxStart(function () {
               $.blockUI({
@@ -338,6 +395,22 @@
         table.draw();
       })
     }
+    var mySwiper9 = new Swiper('.swiper-coverflow', {
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 'auto',
+      coverflowEffect: {
+        rotate: 50,
+        stretch: 0,
+        depth: 100,
+        modifier: 1,
+        slideShadows: true
+      },
+      pagination: {
+        el: '.swiper-pagination'
+      }
+    });
 
 
   </script>
