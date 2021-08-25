@@ -74,7 +74,7 @@
   </section>
 
   <div class="modal fade" id="global-modal" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
       <!--Modal Content-->
       <div class="modal-content">
         <section id="component-swiper-coverflow">
