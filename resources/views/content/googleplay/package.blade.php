@@ -338,7 +338,6 @@
     $(document).on('click','.followApp', function (data) {
       const row = table.row(data.target.closest('tr'));
       const rowData = row.data();
-      console.log(rowData)
       $.post('{{asset('googleplay/followApp')}}?id='+rowData.appId,function (data)
       {
         $('.modal').modal('hide');
