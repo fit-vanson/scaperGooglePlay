@@ -77,16 +77,16 @@
     <div class="modal-dialog modal-xl">
       <!--Modal Content-->
       <div class="modal-content">
-        <section id="component-swiper-coverflow">
+        <section id="component-swiper-multiple">
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">Screenshot</h4>
+              <h4 class="card-title">Multiple Slides Per View</h4>
             </div>
             <div class="card-body">
-              <div class="swiper-coverflow swiper-container">
+              <div class="swiper-multiple swiper-container">
                 <div class="swiper-wrapper" id="screenshot_img">
-                  <div class="swiper-slide" >
-                    <img class="img-fluid" src="" alt="banner" />
+                  <div class="swiper-slide">
+                    <img class="img-fluid" src="" alt="screenshot" />
                   </div>
                 </div>
                 <!-- Add Pagination -->
@@ -326,7 +326,7 @@
       rowData.screenshots.forEach(function(item, index, array) {
 
         a += '<div class="swiper-slide">'+
-                        '<img class="img-fluid screenshot_img" style="max-width: 310px; max-height: 720px" src="'+item+'" alt="screenshot" />'+
+                        '<img class="img-fluid screenshot_img" style="width: auto; height: 512px" src="'+item+'" alt="screenshot" />'+
                 '</div>';
       })
       document.getElementById("screenshot_img").innerHTML = a;
@@ -397,6 +397,14 @@
       },
       pagination: {
         el: '.swiper-pagination'
+      }
+    });
+    var mySwiper4 = new Swiper('.swiper-multiple', {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
       }
     });
 
