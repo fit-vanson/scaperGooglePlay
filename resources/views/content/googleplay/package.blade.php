@@ -326,7 +326,7 @@
       rowData.screenshots.forEach(function(item, index, array) {
 
         a += '<div class="swiper-slide">'+
-                        '<img class="img-fluid screenshot_img" style= "max-width: none; height: 550px;padding: 0px 15px; display: inline-block" src="'+item+'" alt="screenshot" />'+
+                        '<img class="img-fluid screenshot_img" src="'+item+'" alt="screenshot" />'+
                 '</div>';
       })
       document.getElementById("screenshot_img").innerHTML = a;
