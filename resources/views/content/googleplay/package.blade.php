@@ -325,8 +325,8 @@
       let a = '';
       rowData.screenshots.forEach(function(item, index, array) {
 
-        a += '<div class="swiper-slide">'+
-                        '<img class="img-fluid screenshot_img" style="width: auto; height: 512px" src="'+item+'" alt="screenshot" />'+
+        a += '<div class="swiper-slide" style="height: 550px;width: auto" >'+
+                        '<img class="img-fluid" src="'+item+'" alt="screenshot" />'+
                 '</div>';
       })
       document.getElementById("screenshot_img").innerHTML = a;
@@ -400,7 +400,8 @@
       }
     });
     var mySwiper4 = new Swiper('.swiper-multiple', {
-      spaceBetween: 20,
+      slidesPerView: 6,
+      spaceBetween: 30,
       pagination: {
         el: '.swiper-pagination',
         clickable: true
