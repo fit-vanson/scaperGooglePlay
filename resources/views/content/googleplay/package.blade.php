@@ -385,9 +385,9 @@
     }
     var mySwiper9 = new Swiper('.swiper-coverflow', {
       // effect: 'coverflow',
-      // grabCursor: true,
-      // centeredSlides: true,
-      // slidesPerView: 'auto',
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 'auto',
       // coverflowEffect: {
       //   rotate: 50,
       //   stretch: 0,
