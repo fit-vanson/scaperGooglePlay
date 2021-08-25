@@ -326,7 +326,7 @@
       rowData.screenshots.forEach(function(item, index, array) {
 
         a += '<div class="swiper-slide">'+
-                        '<img class="img-fluid screenshot_img" src="'+item+'" alt="banner" />'+
+                        '<img class="img-fluid screenshot_img" style= "width: auto; height: 600px;padding: 0px 20px" src="'+item+'" alt="screenshot" />'+
                 '</div>';
       })
       document.getElementById("screenshot_img").innerHTML = a;
@@ -357,18 +357,6 @@
         },
       });
     });
-    {{--$('#checkAppForm').on('submit',function (event){--}}
-    {{--  event.preventDefault();--}}
-    {{--  $.ajax({--}}
-    {{--    data: $('#checkAppForm').serialize(),--}}
-    {{--    url: "{{ route('googleplay-chooseApp') }}",--}}
-    {{--    type: "post",--}}
-    {{--    dataType: 'json',--}}
-    {{--    success: function (data) {--}}
-    {{--      location.href = "http://127.0.0.1:8000/googleplay/chooseApp"--}}
-    {{--    },--}}
-    {{--  });--}}
-    {{--});--}}
     $(document)
             .ajaxStart(function () {
               $.blockUI({
