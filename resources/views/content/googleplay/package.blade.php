@@ -400,8 +400,7 @@
       }
     });
     var mySwiper4 = new Swiper('.swiper-multiple', {
-      slidesPerView: 3,
-      spaceBetween: 30,
+      spaceBetween: 20,
       pagination: {
         el: '.swiper-pagination',
         clickable: true
