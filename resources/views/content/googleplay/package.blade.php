@@ -26,7 +26,7 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content panel-warning">
         <div class="modal-header panel-heading">
-          <h4 class="modal-title">Modal title</h4>
+          <h4 class="modal-title" id="modelHeading"></h4>
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
         <div class="modal-body">
@@ -350,11 +350,13 @@
       const rowData = row.data();
       let a = '';
       rowData.screenshots.forEach(function(item, index, array) {
+
         a += '<div class="swiper-slide">'+
                         '<img class="img-fluid" src="'+item+'" alt="screenshot" />'+
                 '</div>';
       })
       document.getElementById("screenshot_img").innerHTML = a;
+      $('#modelHeading').html(rowData.name);
       $('#myModal').modal('show');
       $('#myModal').on('shown.bs.modal', function(e) {
         swiper.update();
