@@ -164,7 +164,7 @@
 
 
     var table=$('.datatables-basic').DataTable({
-      displayLength: 2,
+      displayLength: 250,
       lengthMenu: [20,50, 100, 250, 500],
       serverSide: true,
       processing: true,
