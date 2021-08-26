@@ -174,7 +174,7 @@
       },
       columns: [
         { data: 'idr' },
-        { data: 'appId' },
+        { data: 'id' },
         { data: 'appId' },
         { data: 'logo' }, // used for sorting so will hide this column
         { data: 'cover' },
@@ -307,7 +307,7 @@
             header: function (row) {
               var data = row.data();
 
-              return 'Details of ' + data['name'];
+              return data['name'];
             }
           }),
           type: 'column',
