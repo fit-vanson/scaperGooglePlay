@@ -13,12 +13,37 @@
 @endsection
 @section('page-style')
   {{--   Page Css files--}}
+
   <link rel="stylesheet" href="{{asset('css/base/pages/ui-feather.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/base/plugins/forms/pickers/form-flat-pickr.css')}}">
   <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/extensions/ext-component-swiper.css')) }}">
 @endsection
 
 @section('content')
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content panel-warning">
+        <div class="modal-header panel-heading">
+          <h4 class="modal-title">Modal title</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="swiper-container">
+            <div class="swiper-wrapper" id="screenshot_img">
+              <div class="swiper-slide">
+                <img class="img-fluid" src="" alt="banner" />
+              </div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
   <section id="feather-icons">
     <div class="row">
       <div class="col-12">
@@ -73,34 +98,6 @@
     </div>
   </section>
 
-  <div class="modal fade" id="global-modal" role="dialog">
-    <div class="modal-dialog modal-xl">
-      <!--Modal Content-->
-      <div class="modal-content">
-        <section id="component-swiper-multiple">
-          <div class="card">
-            <div class="card-header">
-              <h4 class="card-title">Multiple Slides Per View</h4>
-            </div>
-            <div class="card-body">
-              <div class="swiper-multiple swiper-container">
-                <div class="swiper-wrapper" id="screenshot_img">
-                  <div class="swiper-slide">
-                    <img class="img-fluid" src="" alt="screenshot" />
-                  </div>
-                </div>
-                <!-- Add Pagination -->
-                <div class="swiper-pagination"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-  </div>
-
-
-
 
 @endsection
 
@@ -136,9 +133,38 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+    var swiper = new Swiper('.swiper-container', {
+      slidesPerView: 5,
+      loop: true,
+      spaceBetween: 20,
+      // init: false,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
+      breakpoints: {
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 40
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 30
+        },
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20
+        },
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        }
+      }
+    });
+
 
     var table=$('.datatables-basic').DataTable({
-      displayLength: 250,
+      displayLength: 2,
       lengthMenu: [20,50, 100, 250, 500],
       serverSide: true,
       processing: true,
@@ -324,15 +350,15 @@
       const rowData = row.data();
       let a = '';
       rowData.screenshots.forEach(function(item, index, array) {
-
         a += '<div class="swiper-slide">'+
                         '<img class="img-fluid" src="'+item+'" alt="screenshot" />'+
                 '</div>';
       })
       document.getElementById("screenshot_img").innerHTML = a;
-      $('#global-modal').modal('show');
-
-
+      $('#myModal').modal('show');
+      $('#myModal').on('shown.bs.modal', function(e) {
+        swiper.update();
+      });
     });
     $('div.head-label').html('<h6 class="mb-0">Tìm kiếm Ứng dụng</h6>');
     $(document).on('click','.followApp', function (data) {
@@ -382,32 +408,6 @@
         table.draw();
       })
     }
-    var mySwiper9 = new Swiper('.swiper-coverflow', {
-      // effect: 'coverflow',
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: 'auto',
-      coverflowEffect: {
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: true
-      },
-      pagination: {
-        el: '.swiper-pagination'
-      }
-    });
-    var mySwiper4 = new Swiper('.swiper-multiple', {
-      slidesPerView: 6,
-      spaceBetween: 30,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true
-      }
-    });
-
-
   </script>
 @endsection
 
