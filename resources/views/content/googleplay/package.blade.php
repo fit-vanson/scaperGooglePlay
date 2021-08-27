@@ -139,6 +139,7 @@
     });
     var swiper =  new Swiper('.swiper-responsive-breakpoints', {
       slidesPerView: 'auto',
+      loop:true,
       spaceBetween: 10,
 
       // init: false,
