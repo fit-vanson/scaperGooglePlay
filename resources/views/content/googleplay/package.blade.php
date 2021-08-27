@@ -139,10 +139,8 @@
     });
     var swiper =  new Swiper('.swiper-responsive-breakpoints', {
       slidesPerView: 'auto',
-      height:500,
       spaceBetween: 10,
-      grabCursor: true,
-      centeredSlides: true,
+
       // init: false,
       pagination: {
         el: '.swiper-pagination',
