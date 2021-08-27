@@ -354,10 +354,10 @@
       const rowData = row.data();
       let a = '';
       rowData.screenshots.forEach(function(item, index, array) {
-        a +=  item + '\n\n'
+        a +=  item + '=w2560-h1297-rw'+ '\n\n'
       })
       $('#copy-icon-input').val(rowData.logo);
-      $('#copy-banner-input').val(rowData.cover);
+      $('#copy-banner-input').val(rowData.cover+ '=w2560-h1297-rw');
       $('#copy-preview-input').val(a);
       $('#modelHeading').html(rowData.name);
       $('#modal_link').modal('show');

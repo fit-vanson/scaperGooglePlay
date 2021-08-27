@@ -9,14 +9,17 @@
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/buttons.bootstrap4.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/rowGroup.bootstrap4.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/flatpickr/flatpickr.min.css')) }}">
+  <link rel="stylesheet" href="{{asset('vendors/css/extensions/toastr.min.css')}}">
 @endsection
 @section('page-style')
 {{--   Page Css files--}}
   <link rel="stylesheet" href="{{asset('css/base/pages/ui-feather.css')}}">
+  <link rel="stylesheet" href="{{asset('css/base/plugins/extensions/ext-component-toastr.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/base/plugins/forms/pickers/form-flat-pickr.css')}}">
 @endsection
 
 @section('content')
+  @include('content.googleplay.modal')
   <section id="feather-icons">
     <div class="row">
       <div class="col-12">
@@ -68,9 +71,6 @@
   </div>
 </section>
 
-
-
-
 @endsection
 
 @section('vendor-script')
@@ -88,11 +88,12 @@
    <script src="{{ asset(mix('vendors/js/tables/datatable/buttons.print.min.js')) }}"></script>
    <script src="{{ asset(mix('vendors/js/tables/datatable/dataTables.rowGroup.min.js')) }}"></script>
    <script src="{{ asset(mix('vendors/js/pickers/flatpickr/flatpickr.min.js')) }}"></script>
+   <script src="{{asset('vendors/js/extensions/toastr.min.js')}}"></script>
 @endsection
 
 @section('page-script')
   <script src="{{ asset(mix('vendors/js/extensions/sweetalert2.all.min.js')) }}"></script>
-{{--  <script src="{{ asset(('js/scripts/tables/table-datatables-basic.js')) }}"></script>--}}
+  <script src="{{ asset(('js/scripts/googleplay/clipboard.js')) }}"></script>
 
   <script type="text/javascript">
     $.ajaxSetup({
@@ -283,12 +284,26 @@
     $(document).on('click','.followApp', function (data) {
       const row = table.row(data.target.closest('tr'));
       const rowData = row.data();
-      console.log(rowData)
       $.post('{{asset('googleplay/followApp')}}?id='+rowData.appId,function (data)
       {
         $('.modal').modal('hide');
         table.draw();
       })
+    });
+    $(document).on('click','.showLink', function (data) {
+      const row = table.row(data.target.closest('tr'));
+      const rowData = row.data();
+      let a = '';
+      rowData.screenshots.forEach(function(item, index, array) {
+        a +=  item + '=w2560-h1297-rw'+ '\n\n'
+      })
+      $('#copy-icon-input').val(rowData.logo);
+      $('#copy-banner-input').val(rowData.cover+ '=w2560-h1297-rw');
+      $('#copy-preview-input').val(a);
+      $('#modelHeading').html(rowData.name);
+      $('#modal_link').modal('show');
+      $('.modal').modal('hide');
+
     });
 
     $('#searchAppForm').on('submit',function (event){
