@@ -15,6 +15,11 @@
 @endsection
 @section('page-style')
     <!-- Page css files -->
+    <style>
+        .swiper-slide {
+            width: auto;
+        }
+    </style>
     <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/charts/chart-apex.css')) }}">
     <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/extensions/ext-component-toastr.css')) }}">
     <link rel="stylesheet" href="{{ asset(mix('css/base/pages/app-user.css')) }}">
@@ -134,6 +139,32 @@
                     </div>
                 </div>
                 <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Screenshot</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="swiper-responsive-breakpoints swiper-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img class="img-fluid" style="width: auto;height: 350px"  src="{{$appInfo->cover}}" alt="banner" />
+                                </div>
+                                @foreach(\GuzzleHttp\json_decode($appInfo->screenshots,true) as $screenshot)
+                                    <div class="swiper-slide">
+                                        <img class="img-fluid" style="width: auto;height: 350px" src="{{$screenshot}}" alt="banner" />
+                                    </div>
+                                @endforeach
+                            </div>
+                            <!-- Add Pagination -->
+                            <div class="swiper-pagination"></div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xl-5 col-lg-5 col-md-5">
+                <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-xl-6 col-lg-12 mt-2 mt-xl-0">
@@ -185,7 +216,7 @@
                                     <div class="profile-user-info w-100">
                                         <h6 class="mb-0">{{$review['userName']}}</h6>
                                         @for($a=1;$a<= $review['score'];$a++)
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 12.705 512 486.59" x="0px" y="0px" xml:space="preserve" width="12px" height="12px" fill="#f39c12"><polygon points="256.814,12.705 317.205,198.566 512.631,198.566 354.529,313.435 414.918,499.295 256.814,384.427 98.713,499.295 159.102,313.435 1,198.566 196.426,198.566 "></polygon></svg>
+                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 12.705 512 486.59" x="0px" y="0px" xml:space="preserve" width="12px" height="12px" fill="#f39c12"><polygon points="256.814,12.705 317.205,198.566 512.631,198.566 354.529,313.435 414.918,499.295 256.814,384.427 98.713,499.295 159.102,313.435 1,198.566 196.426,198.566 "></polygon></svg>
                                         @endfor
                                         @for($a=1;$a<= 5- $review['score'];$a++)
                                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 12.705 512 486.59" x="0px" y="0px" xml:space="preserve" width="12px" height="12px" fill="gray"><polygon points="256.814,12.705 317.205,198.566 512.631,198.566 354.529,313.435 414.918,499.295 256.814,384.427 98.713,499.295 159.102,313.435 1,198.566 196.426,198.566 "></polygon></svg>
@@ -199,40 +230,6 @@
                                 </div>
                             @endif
                         @endforeach
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-5 col-lg-5 col-md-5">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Banner</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="swiper-default swiper-container">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img class="img-fluid" src="{{$appInfo->cover}}" alt="banner" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Screenshot</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="swiper-coverflow swiper-container">
-                            <div class="swiper-wrapper">
-                                @foreach(\GuzzleHttp\json_decode($appInfo->screenshots,true) as $screenshot)
-                                    <div class="swiper-slide">
-                                        <img class="img-fluid" style="height: 300px" src="{{$screenshot}}" alt="banner" />
-                                    </div>
-                                @endforeach
-                            </div>
-                            <!-- Add Pagination -->
-                            <div class="swiper-pagination"></div>
-                        </div>
                     </div>
                 </div>
                 <div class="card">
@@ -526,21 +523,19 @@
                     ])
                 }
             });
-            new Swiper('.swiper-coverflow', {
-                effect: 'coverflow',
+
+            new Swiper('.swiper-responsive-breakpoints', {
+                slidesPerView: 'auto',
+                height:500,
+                spaceBetween: 10,
                 grabCursor: true,
                 centeredSlides: true,
-                slidesPerView: 'auto',
-                coverflowEffect: {
-                    rotate: 50,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 1,
-                    slideShadows: true
-                },
+                // init: false,
                 pagination: {
-                    el: '.swiper-pagination'
-                }
+                    el: '.swiper-pagination',
+                    clickable: true
+                },
+
             });
         });
 

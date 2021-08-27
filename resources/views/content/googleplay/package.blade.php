@@ -13,6 +13,11 @@
 @endsection
 @section('page-style')
   {{--   Page Css files--}}
+  <style>
+    .swiper-slide {
+      width: auto;
+    }
+  </style>
 
   <link rel="stylesheet" href="{{asset('css/base/pages/ui-feather.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/base/plugins/forms/pickers/form-flat-pickr.css')}}">
@@ -30,11 +35,11 @@
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
         <div class="modal-body">
-          <div class="swiper-container">
+          <div class="swiper-responsive-breakpoints swiper-container">
             <div class="swiper-wrapper" id="screenshot_img">
-              <div class="swiper-slide">
-                <img class="img-fluid" src="" alt="banner" />
-              </div>
+                <div class="swiper-slide">
+                  <img class="img-fluid" style="width: auto;height: 350px" src="" alt="banner" />
+                </div>
             </div>
             <!-- Add Pagination -->
             <div class="swiper-pagination"></div>
@@ -74,10 +79,9 @@
                   <th></th>
                   <th></th>
                   <th>AppID</th>
-                  <th>Logo</th>
-                  <th style="width: 250px">Banner</th>
-                  <th>IAP</th>
-                  <th>Ads</th>
+                  <th style="width: 310px">Logo</th>
+                  <th style="width: 310px">Summary</th>
+                  <th>IAP / Ads</th>
                   <th>Installs</th>
                   <th>Votes</th>
                   <th>Reviews</th>
@@ -133,41 +137,25 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-    var swiper = new Swiper('.swiper-container', {
-      slidesPerView: 5,
-      loop: true,
-      spaceBetween: 20,
+    var swiper =  new Swiper('.swiper-responsive-breakpoints', {
+      slidesPerView: 'auto',
+      height:500,
+      spaceBetween: 10,
+      grabCursor: true,
+      centeredSlides: true,
       // init: false,
       pagination: {
         el: '.swiper-pagination',
         clickable: true
       },
-      breakpoints: {
-        1024: {
-          slidesPerView: 4,
-          spaceBetween: 40
-        },
-        768: {
-          slidesPerView: 3,
-          spaceBetween: 30
-        },
-        640: {
-          slidesPerView: 2,
-          spaceBetween: 20
-        },
-        320: {
-          slidesPerView: 1,
-          spaceBetween: 10
-        }
-      }
-    });
 
+    });
 
     var table=$('.datatables-basic').DataTable({
       displayLength: 250,
       lengthMenu: [20,50, 100, 250, 500],
       serverSide: true,
-      processing: true,
+      processing: false,
       ajax: {
         url: "{{route('googleplay-get-index')}}",
         type: "post",
@@ -177,9 +165,8 @@
         { data: 'id' },
         { data: 'appId' },
         { data: 'logo' }, // used for sorting so will hide this column
-        { data: 'cover' },
+        { data: 'summary' },
         { data: 'offersIAPCost' },
-        { data: 'containsAds' },
         { data: 'installs' },
         { data: 'numberVoters' },
         { data: 'numberReviews' },
@@ -194,11 +181,7 @@
           responsivePriority: 2,
           targets: 0
         },
-        {
-          orderable: false,
-          targets: 2,
-          visible: false,
-        },
+
         {
           // For Checkboxes
           targets: 1,
@@ -218,40 +201,46 @@
                     '<div class="custom-control custom-checkbox"> <input class="custom-control-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="custom-control-label" for="checkboxSelectAll"></label></div>'
           }
         },
+        {
+          orderable: false,
+          targets: [2],
+          visible: false,
+        },
 
         {
-          targets: 4,
+          targets: 3,
           responsivePriority: 1,
           render: function (data, type, full, meta) {
             // Creates full output for row
-            return '<div class="swiper-default swiper-container banner_click">'+
-                      '<div class="swiper-wrapper">'+
-                        '<div class="swiper-slide">'+
-                          '<img class="img-fluid" style="height: 100px;" src="'+full.cover+'" alt="banner" />'+
-                        '</div>'+
-                      '</div>'+
-                      '</div>';
+            return '<span class="emp_name text-truncate font-weight-bold">' +full.name +'</span>'  +'<div class="d-flex align-items-center">' +
+                    '<div >' +
+                    full.logo +
+                    ' <img class="img-fluid banner_click" style="height: 100px; width: 200px" src="'+full.cover+'" alt="banner" />'+
+                    '</div>' +
+                    '</div>';
           }
         },
         {
-          targets: [5,6],
+          targets: [5],
           responsivePriority: 1,
           render: function (data, type, full, meta) {
-            if(data == 1){
-              return  '<div class="badge badge-light-success">Có</div>';
+            if(full.containsAds == 1){
+              $containsAds =  '<div class="badge badge-light-success">Yes</div>';
             } else {
-              return '<div class="badge badge-light-danger">Không</div>';
+              $containsAds =  '<div class="badge badge-light-danger">No</div>';
             }
+            if(full.offersIAPCost == 1){
+              $offersIAPCost =  '<div class="badge badge-light-success">Yes</div>';
+            } else {
+              $offersIAPCost =  '<div class="badge badge-light-danger">No</div>';
+            }
+            return 'IAP: ' + $offersIAPCost + '<br> <br> ADS: '+ $containsAds
           }
-        },
-        {
-          responsivePriority: 4,
-          targets: 11
         },
 
 
       ],
-      order: [[7, 'desc']],
+      order: [[6, 'desc']],
       dom:
               '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
 
@@ -263,33 +252,38 @@
           buttons: [
             {
               extend: 'print',
+              charset: 'UTF-8',
               text: feather.icons['printer'].toSvg({ class: 'font-small-4 mr-50' }) + 'Print',
               className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8] }
+              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
             },
             {
               extend: 'csv',
+              charset: 'UTF-8',
               text: feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) + 'Csv',
               className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8] }
+              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
             },
             {
               extend: 'excel',
+              charset: 'UTF-8',
               text: feather.icons['file'].toSvg({ class: 'font-small-4 mr-50' }) + 'Excel',
               className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8] }
+              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
             },
             {
               extend: 'pdf',
+              charset: 'UTF-8',
               text: feather.icons['clipboard'].toSvg({ class: 'font-small-4 mr-50' }) + 'Pdf',
               className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8] }
+              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
             },
             {
               extend: 'copy',
+              charset: 'UTF-8',
               text: feather.icons['copy'].toSvg({ class: 'font-small-4 mr-50' }) + 'Copy',
               className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8] }
+              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
             }
           ],
           init: function (api, node, config) {
@@ -341,7 +335,11 @@
           previous: '&nbsp;',
           next: '&nbsp;'
         }
-      }
+      },
+      // scrollY: 200,
+      scroller: {
+        loadingIndicator: true
+      },
     });
 
     table.on('click', '.banner_click', e=> {
@@ -352,7 +350,7 @@
       rowData.screenshots.forEach(function(item, index, array) {
 
         a += '<div class="swiper-slide">'+
-                        '<img class="img-fluid" src="'+item+'" alt="screenshot" />'+
+                        '<img class="img-fluid" style="width: auto;height: 450px" src="'+item+'" alt="screenshot" />'+
                 '</div>';
       })
       document.getElementById("screenshot_img").innerHTML = a;

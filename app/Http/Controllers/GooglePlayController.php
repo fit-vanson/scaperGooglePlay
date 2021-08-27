@@ -48,6 +48,7 @@ class GooglePlayController extends Controller
                     'logo' => $appInfo->getIcon()->getUrl(),
                     'appId' => $appInfo->getId(),
                     'name' => $appInfo->getName(),
+                    'summary' => $appInfo->getSummary(),
                     'cover' => $appInfo->getCover(),
                     'screenshots' =>$url_screenshot,
                     'installs' => $appInfo->getInstalls(),
@@ -121,7 +122,7 @@ class GooglePlayController extends Controller
                 }
                 $action .= ' <div class="avatar avatar-status bg-light-info">
                                  <span class="avatar-content">
-                                    <a href="../googleplay/detail?id='.$record->appId.'" class="btn-flat-info">
+                                    <a href="../googleplay/detail?id='.$record->appId.'" target="_blank" class="btn-flat-info">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                     </a>
                                 </span>
@@ -135,13 +136,13 @@ class GooglePlayController extends Controller
                                     </a>
                                 </div>';
             }
-//            dd(json_decode($record->screenshots,true));
             $data_arr[] = array(
                 "idr" => '',
                 "id" => $record->id,
-                "logo" => '<a href="http://play.google.com/store/apps/details?id='.$record->appId.'&hl=en" target="_blank" ><img class="rounded mx-auto d-block" width="100px" height="100px" src="'.$record->logo.'"></a>',
+                "logo" => '<a href="http://play.google.com/store/apps/details?id='.$record->appId.'&hl=en" target="_blank" ><img class="img-fluid" width="100px" height="100px" src="'.$record->logo.'"></a>',
                 "appId"=>$record->appId,
                 "name"=>$record->name,
+                "summary"=>$record->summary,
                 "installs" => number_format($record->installs),
                 "numberVoters" =>number_format($record->numberVoters),
                 "numberReviews" => number_format($record->numberReviews),
