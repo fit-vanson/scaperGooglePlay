@@ -95,14 +95,11 @@
 {{--  <script src="{{ asset(('js/scripts/tables/table-datatables-basic.js')) }}"></script>--}}
 
   <script type="text/javascript">
-
-
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-
     var table=$('.datatables-basic').DataTable({
       displayLength: 250,
       lengthMenu: [20, 50, 100, 250, 500],
