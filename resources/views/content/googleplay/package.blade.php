@@ -61,7 +61,6 @@
             </div>
             <div class="col-xl-2">
               <button class="btn btn-outline-primary" id="btn-copy-banner">Copy!</button>
-              <button class="btn btn-outline-success" id="btn-copy">Copy!</button>
             </div>
           </div>
           <div class="row">
@@ -203,7 +202,7 @@
     });
 
     var table=$('.datatables-basic').DataTable({
-      displayLength: 2,
+      displayLength: 250,
       lengthMenu: [20,50, 100, 250, 500],
       serverSide: true,
       processing: false,
