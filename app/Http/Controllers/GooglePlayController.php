@@ -175,8 +175,8 @@ class GooglePlayController extends Controller
                 if($data[0]['date'] != Carbon::now()->format('Y-m-d')){
                     $gplay = new GPlayApps();
                     $appInfo = $gplay->existsApp($app->appId);
-                    dd($appInfo);
-                    if(isset($appInfo)){
+
+                    if($appInfo != false){
                         $appInfo = $gplay->getAppInfo($app->appId);
                         $dataCron [] = [
                             'date' => Carbon::now()->format('Y-m-d'),
