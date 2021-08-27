@@ -166,7 +166,7 @@ class GooglePlayController extends Controller
     public function cronApps(Request $request){
         ini_set('max_execution_time',500);
         $time_to_cron = Carbon::now()->today();
-        $apps = AppsInfo::where('status',1)->where('updated_at','<=',$time_to_cron)->limit(50)->get();
+        $apps = AppsInfo::where('status',1)->where('updated_at','<=',$time_to_cron)->limit(100)->get();
         if(isset($apps)){
             foreach ($apps as $app){
                 echo '<br/>'.'Dang chay App: ' . $app->appId;
@@ -174,18 +174,22 @@ class GooglePlayController extends Controller
                 $dataCron =[];
                 if($data[0]['date'] != Carbon::now()->format('Y-m-d')){
                     $gplay = new GPlayApps();
-                    $appInfo = $gplay->getAppInfo($app->appId);
-                    $dataCron [] = [
-                        'date' => Carbon::now()->format('Y-m-d'),
-                        'size' => $appInfo->getSize(),
-                        'appVersion' => $appInfo->getAppVersion(),
-                        'installs' => $appInfo->getInstalls(),
-                        'score' => $appInfo->getScore(),
-                        'numberVoters' => $appInfo->getNumberVoters(),
-                        'numberReviews' => $appInfo->getNumberReviews(),
-                        'histogramRating' => $appInfo->getHistogramRating(),
-                        'updated' => $appInfo->getUpdated(),
-                    ];
+                    $appInfo = $gplay->existsApp($app->appId);
+                    if(isset($appInfo)){
+                        $appInfo = $gplay->getAppInfo($app->appId);
+                        $dataCron [] = [
+                            'date' => Carbon::now()->format('Y-m-d'),
+                            'size' => $appInfo->getSize(),
+                            'appVersion' => $appInfo->getAppVersion(),
+                            'installs' => $appInfo->getInstalls(),
+                            'score' => $appInfo->getScore(),
+                            'numberVoters' => $appInfo->getNumberVoters(),
+                            'numberReviews' => $appInfo->getNumberReviews(),
+                            'histogramRating' => $appInfo->getHistogramRating(),
+                            'updated' => $appInfo->getUpdated(),
+                        ];
+                    }
+
                 }
                 $dataApp = array_merge($dataCron, $data);
                 $dataApp = json_encode($dataApp);
