@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/rowGroup.bootstrap4.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/flatpickr/flatpickr.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/extensions/swiper.min.css')) }}">
+  <link rel="stylesheet" href="{{asset('vendors/css/extensions/toastr.min.css')}}">
 @endsection
 @section('page-style')
   {{--   Page Css files--}}
@@ -22,11 +23,65 @@
   <link rel="stylesheet" href="{{asset('css/base/pages/ui-feather.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('css/base/plugins/forms/pickers/form-flat-pickr.css')}}">
   <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/extensions/ext-component-swiper.css')) }}">
+  <link rel="stylesheet" href="{{asset('css/base/plugins/extensions/ext-component-toastr.css')}}">
 @endsection
 
 @section('content')
 
   <!-- Modal -->
+  <div class="modal fade" id="modal_link" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content panel-warning">
+        <div class="modal-header panel-heading">
+          <h4 class="modal-title" id="modelHeading"></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xl-2">
+              <span> Icon:</span>
+            </div>
+            <div class="col-xl-8">
+              <div class="form-group">
+                <input type="text" class="form-control" id="copy-icon-input" value="Icon" />
+              </div>
+            </div>
+            <div class="col-xl-2">
+              <button class="btn btn-outline-primary" id="btn-copy-icon">Copy!</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-2">
+              <span> Banner:</span>
+            </div>
+            <div class="col-xl-8">
+              <div class="form-group">
+                <input type="text" class="form-control" id="copy-banner-input" value="Banner" />
+              </div>
+            </div>
+            <div class="col-xl-2">
+              <button class="btn btn-outline-primary" id="btn-copy-banner">Copy!</button>
+              <button class="btn btn-outline-success" id="btn-copy">Copy!</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-2">
+              <span> Preview: </span>
+            </div>
+            <div class="col-xl-8">
+              <div class="form-group">
+                <textarea rows="20" type="text" class="form-control" id="copy-preview-input"> </textarea>
+              </div>
+            </div>
+            <div class="col-xl-2">
+              <button class="btn btn-outline-primary" id="btn-copy-preview">Copy!</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content panel-warning">
@@ -38,7 +93,7 @@
           <div class="swiper-responsive-breakpoints swiper-container">
             <div class="swiper-wrapper" id="screenshot_img">
                 <div class="swiper-slide">
-                  <img class="img-fluid" style="width: auto;height: 350px" src="" alt="banner" />
+
                 </div>
             </div>
             <!-- Add Pagination -->
@@ -120,8 +175,8 @@
   <script src="{{ asset(mix('vendors/js/tables/datatable/buttons.print.min.js')) }}"></script>
   <script src="{{ asset(mix('vendors/js/tables/datatable/dataTables.rowGroup.min.js')) }}"></script>
   <script src="{{ asset(mix('vendors/js/pickers/flatpickr/flatpickr.min.js')) }}"></script>
-
   <script src="{{ asset(mix('vendors/js/extensions/swiper.min.js')) }}"></script>
+  <script src="{{asset('vendors/js/extensions/toastr.min.js')}}"></script>
 
 @endsection
 
@@ -130,8 +185,6 @@
   {{--  <script src="{{ asset(('js/scripts/tables/table-datatables-basic.js')) }}"></script>--}}
 
   <script type="text/javascript">
-
-
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -147,11 +200,10 @@
         el: '.swiper-pagination',
         clickable: true
       },
-
     });
 
     var table=$('.datatables-basic').DataTable({
-      displayLength: 250,
+      displayLength: 2,
       lengthMenu: [20,50, 100, 250, 500],
       serverSide: true,
       processing: false,
@@ -165,7 +217,7 @@
         { data: 'appId' },
         { data: 'logo' }, // used for sorting so will hide this column
         { data: 'summary' },
-        { data: 'offersIAPCost' },
+        { data: 'size' },
         { data: 'installs' },
         { data: 'numberVoters' },
         { data: 'numberReviews' },
@@ -177,15 +229,14 @@
           // For Responsive
           className: 'control',
           orderable: false,
-          responsivePriority: 2,
+          responsivePriority: 0,
           targets: 0
         },
-
         {
           // For Checkboxes
           targets: 1,
           orderable: false,
-          responsivePriority: 3,
+          responsivePriority: 2,
           render: function (data, type, full, meta) {
             return (
                     '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="'+full.appId+'" name="checkbox[]" id="checkbox' +
@@ -205,15 +256,17 @@
           targets: [2],
           visible: false,
         },
-
         {
           targets: 3,
           responsivePriority: 1,
           render: function (data, type, full, meta) {
             // Creates full output for row
-            return '<span class="emp_name text-truncate font-weight-bold">' +full.name +'</span>'  +'<div class="d-flex align-items-center">' +
+            return '<span class="emp_name text-truncate font-weight-bold">' +full.name +'</span>'  +
+                    '<div class="d-flex align-items-center">' +
                     '<div >' +
-                    full.logo +
+                    '<a href="http://play.google.com/store/apps/details?id='+full.appId+
+                    '&hl=en" target="_blank" ><img class="img-fluid" width="100px" height="100px" src="'+
+                    full.logo + '"></a>'+
                     ' <img class="img-fluid banner_click" style="height: 100px; width: 200px" src="'+full.cover+'" alt="banner" />'+
                     '</div>' +
                     '</div>';
@@ -221,7 +274,7 @@
         },
         {
           targets: [5],
-          responsivePriority: 1,
+          responsivePriority: 3,
           render: function (data, type, full, meta) {
             if(full.containsAds == 1){
               $containsAds =  '<div class="badge badge-light-success">Yes</div>';
@@ -233,16 +286,18 @@
             } else {
               $offersIAPCost =  '<div class="badge badge-light-danger">No</div>';
             }
-            return 'IAP: ' + $offersIAPCost + '<br> <br> ADS: '+ $containsAds
+            if(full.size != null){
+              $size =  '<span class="emp_name text-truncate font-weight-bold">Size: ' +full.size +'</span>';
+            } else {
+              $size =  '<span class="emp_name text-truncate font-weight-bold">Size: Null</span>';
+            }
+            return $size + '<br> <br> IAP: ' + $offersIAPCost + '<br> <br> ADS: '+ $containsAds
           }
         },
-
-
       ],
       order: [[6, 'desc']],
       dom:
               '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-
       buttons: [
         {
           extend: 'collection',
@@ -299,14 +354,12 @@
           display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
-
               return data['name'];
             }
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
             var data = $.map(columns, function (col, i) {
-
               return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
                       ? '<tr data-dt-row="' +
                       col.rowIndex +
@@ -347,7 +400,6 @@
       const rowData = row.data();
       let a = '';
       rowData.screenshots.forEach(function(item, index, array) {
-
         a += '<div class="swiper-slide">'+
                         '<img class="img-fluid" style="width: auto;height: 450px" src="'+item+'" alt="screenshot" />'+
                 '</div>';
@@ -368,6 +420,21 @@
         $('.modal').modal('hide');
         table.draw();
       })
+    });
+    $(document).on('click','.showLink', function (data) {
+      const row = table.row(data.target.closest('tr'));
+      const rowData = row.data();
+      let a = '';
+      rowData.screenshots.forEach(function(item, index, array) {
+        a +=  item + '\n\n'
+      })
+      $('#copy-icon-input').val(rowData.cover);
+      $('#copy-banner-input').val(rowData.cover);
+      $('#copy-preview-input').val(a);
+      $('#modelHeading').html(rowData.name);
+      $('#modal_link').modal('show');
+      $('.modal').modal('hide');
+
     });
     $('#searchAppForm').on('submit',function (event){
       event.preventDefault();
@@ -407,6 +474,32 @@
         table.draw();
       })
     }
+    var iconText = $('#copy-icon-input');
+    var bannerText = $('#copy-banner-input');
+    var previewText = $('#copy-preview-input');
+
+    var btnCopyIcon = $('#btn-copy-icon');
+    var btnCopyBanner = $('#btn-copy-banner');
+    var btnCopyPreview = $('#btn-copy-preview');
+
+    // copy text on click
+    btnCopyIcon.on('click', function () {
+      iconText.select();
+      document.execCommand('copy');
+      toastr['success']('', 'Copied to clipboard!');
+    });
+    btnCopyBanner.on('click', function () {
+      bannerText.select();
+      document.execCommand('copy');
+      toastr['success']('', 'Copied to clipboard!');
+    });
+    btnCopyPreview.on('click', function () {
+      previewText.select();
+      document.execCommand('copy');
+      toastr['success']('', 'Copied to clipboard!');
+    });
+
+
   </script>
 @endsection
 

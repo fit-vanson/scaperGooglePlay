@@ -51,6 +51,7 @@ class GooglePlayController extends Controller
                     'summary' => $appInfo->getSummary(),
                     'cover' => $appInfo->getCover(),
                     'screenshots' =>$url_screenshot,
+                    'size' =>$appInfo->getSize(),
                     'installs' => $appInfo->getInstalls(),
                     'score' => $appInfo->getScore(),
                     'numberVoters' => $appInfo->getNumberVoters(),
@@ -95,17 +96,16 @@ class GooglePlayController extends Controller
             ->get();
         $data_arr = array();
         foreach($records as $record){
+            $action = '<div class="avatar avatar-status bg-light-primary">
+                                    <span class="avatar-content">                                  
+                                        <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-primary showLink">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>  
+                                        </a>
+                                    </span>
+                                </div>';
             if($record->checkExist != null){
-                SaveTemp::updateOrCreate(
-                    [
-                        'appId' => $record->appId,
-                    ],
-                    [
-                        'exist' => 1
-                    ]
-                );
                 if($record->checkExist->status == 1){
-                     $action = '<div class="avatar avatar-status bg-light-warning">
+                     $action .= '<div class="avatar avatar-status bg-light-warning">
                                     <span class="avatar-content">
                                     <a href="javascript:void(0)" onclick="unfollowApp('.$record->id.')" class="btn-flat-warning">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
@@ -113,7 +113,7 @@ class GooglePlayController extends Controller
                                     </span>
                                 </div>';
                 }else{
-                    $action = ' <div class="avatar avatar-status bg-light-secondary">
+                    $action .= ' <div class="avatar avatar-status bg-light-secondary">
                                     <span class="avatar-content">
                                        <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-secondary followApp">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
@@ -129,7 +129,7 @@ class GooglePlayController extends Controller
                              </div>';
             }
             else{
-                $action = ' <div class="avatar avatar-status bg-light-secondary">
+                $action .= ' <div class="avatar avatar-status bg-light-secondary">
                                     <span class="avatar-content">
                                     <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-secondary followApp">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
@@ -139,7 +139,7 @@ class GooglePlayController extends Controller
             $data_arr[] = array(
                 "idr" => '',
                 "id" => $record->id,
-                "logo" => '<a href="http://play.google.com/store/apps/details?id='.$record->appId.'&hl=en" target="_blank" ><img class="img-fluid" width="100px" height="100px" src="'.$record->logo.'"></a>',
+                "logo" => $record->logo,
                 "appId"=>$record->appId,
                 "name"=>$record->name,
                 "summary"=>$record->summary,
@@ -151,6 +151,7 @@ class GooglePlayController extends Controller
                 "cover" =>$record->cover,
                 "offersIAPCost" =>$record->offersIAPCost,
                 "containsAds" =>$record->containsAds,
+                "size" =>$record->size,
                 "screenshots" =>json_decode($record->screenshots,true),
             );
         }

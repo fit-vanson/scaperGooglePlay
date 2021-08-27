@@ -156,7 +156,16 @@
                     '<div class="custom-control custom-checkbox"> <input class="custom-control-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="custom-control-label" for="checkboxSelectAll"></label></div>'
           }
         },
-
+        {
+          targets: 3,
+          responsivePriority: 1,
+          render: function (data, type, full, meta) {
+            // Creates full output for row
+            return  '<a href="http://play.google.com/store/apps/details?id='+full.appId+
+                    '&hl=en" target="_blank" ><img class="img-fluid" width="100px" height="100px" src="'+
+                    full.logo + '"></a>';
+          }
+        },
         {
           targets: 4,
           responsivePriority: 1,
@@ -179,8 +188,6 @@
           responsivePriority: 4,
           targets: 9
         },
-
-
       ],
       order: [[5, 'desc']],
       dom:
