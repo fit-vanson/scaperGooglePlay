@@ -427,7 +427,7 @@
       rowData.screenshots.forEach(function(item, index, array) {
         a +=  item + '\n\n'
       })
-      $('#copy-icon-input').val(rowData.cover);
+      $('#copy-icon-input').val(rowData.logo);
       $('#copy-banner-input').val(rowData.cover);
       $('#copy-preview-input').val(a);
       $('#modelHeading').html(rowData.name);
