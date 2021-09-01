@@ -33,6 +33,12 @@
       "slug": "",
       "submenu": [
         {
+          "url": "googleplay/follow-app",
+          "name": "Follow App",
+          "icon": "circle",
+          "slug": "googleplay-follow-app"
+        },
+        {
           "url": "googleplay/",
           "name": "Search App",
           "icon": "circle",

@@ -414,9 +414,9 @@
             var lineChartEl = document.querySelector('#line-chart'),
                 lineChartConfig = {
                     chart: {
-                        height: 400,
-                        type: 'line',
-                        zoomType: 'xy',
+                        height: 800,
+                        // type: 'bar',
+                        zoomType: 'x,y',
                         parentHeightOffset: 0,
                         toolbar: {
                             show: true
@@ -438,7 +438,7 @@
                     colors: [chartColors.area.series3, chartColors.area.series2, chartColors.area.series1],
                     grid: {
                         padding: {
-                            top: -20
+                            top: +30
                         }
                     },
                     tooltip: {
@@ -457,36 +457,9 @@
                                 day: 'dd MM yyyy',
                                 hour: 'HH:mm'
                             }
-                        }
+                        },
+
                     },
-                    yaxis:
-                        [
-                            {
-                                seriesName: 'Install',
-                                    axisTicks: {
-                                    show: true,
-                                    },
-                                axisBorder: {
-                                    show: true,
-                                },
-                            },
-                            {
-                                opposite: true,
-                                    seriesName: 'Vote',
-                                axisTicks: {
-                                    show: true
-                                },
-                                axisBorder: {
-                                    show: true,
-                                },
-                            },
-                            {
-                                seriesName: 'Vote',
-                                    show: false,
-                            },
-                        ]
-
-
                 };
             if (typeof lineChartEl !== undefined && lineChartEl !== null) {
                 var lineChart = new ApexCharts(lineChartEl, lineChartConfig);
@@ -498,7 +471,7 @@
                 dataType: "json",
                 success: function (result)
                 {
-                    console.log(result)
+                    console.log((result[1]))
                     var length_histogramRating = result[0].length;
                     var histogramRating = result[0][length_histogramRating-1].histogramRating;
                     histogramRating = [histogramRating.one,histogramRating.two,histogramRating.three,histogramRating.four,histogramRating.five];
@@ -506,14 +479,16 @@
                     chart.update();
                     lineChart.updateSeries([
                         {
-                            name: 'Install',
+                            name: 'Installs',
                             type: 'line',
-                            data:result[1]
+                            data:result[1],
+
                         },
                         {
                             name: 'Vote',
                             type: 'line',
-                            data:result[2]
+                            data:result[2],
+
                         },
                         {
                             name: 'Review',
@@ -521,6 +496,55 @@
                             data:result[3]
                         },
                     ])
+                    var maxInstall= Math.max.apply(Math, result[1].map(function(o) { return o.y; }));
+                    var minInstall= Math.min.apply(Math, result[1].map(function(o) { return o.y; }));
+                    var maxVote= Math.max.apply(Math, result[2].map(function(o) { return o.y; }));
+                    var minVote= Math.min.apply(Math, result[2].map(function(o) { return o.y; }));
+                    var maxReview= Math.max.apply(Math, result[3].map(function(o) { return o.y; }));
+                    var minReview= Math.min.apply(Math, result[3].map(function(o) { return o.y; }));
+                    lineChart.updateOptions(
+                            {
+                                yaxis: [
+                                    {
+                                        seriesName: 'Installs',
+                                        axisTicks: {
+                                            show: true,
+                                        },
+                                        axisBorder: {
+                                            show: true,
+                                        },
+                                        max:maxInstall,
+                                        min:minInstall
+
+                                    },
+                                    {
+                                        opposite: true,
+                                        seriesName: 'Vote',
+                                        axisTicks: {
+                                            show: true
+                                        },
+                                        axisBorder: {
+                                            show: true,
+                                        },
+                                        max:maxVote ,
+                                        min:minVote
+                                    },
+                                    {
+                                        opposite: true,
+                                        seriesName: 'Review',
+                                        axisTicks: {
+                                            show: true
+                                        },
+                                        axisBorder: {
+                                            show: true,
+                                        },
+                                        max:maxReview,
+                                        min:minReview
+                                    },
+                                ]
+                            })
+
+
                 }
             });
 

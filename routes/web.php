@@ -34,8 +34,10 @@ Route::group(['prefix' => 'dashboard'], function () {
 
 Route::group(['prefix' => 'googleplay'], function () {
     Route::get('/', [GooglePlayController::class,'index'])->name('googleplay-index');
+    Route::get('/follow-app', [GooglePlayController::class,'followAppIndex'])->name('googleplay-follow-app');
     Route::get('/package', [GooglePlayController::class,'package'])->name('googleplay-package');
     Route::post('/getIndex', [GooglePlayController::class,'getIndex'])->name('googleplay-get-index');
+    Route::post('/getfollowAppIndex', [GooglePlayController::class,'getFollowAppIndex'])->name('googleplay-get-follow-appIndex');
     Route::post('/post', [GooglePlayController::class,'postIndex'])->name('googleplay-post-index');
     Route::get('/cron', [GooglePlayController::class,'cronApps'])->name('googleplay-cron-apps');
     Route::post('/followApp', [GooglePlayController::class,'followApp'])->name('googleplay-followApp');
