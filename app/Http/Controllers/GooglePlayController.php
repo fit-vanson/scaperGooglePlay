@@ -408,7 +408,7 @@ class GooglePlayController extends Controller
         return response()->json(['success'=>'App đã được Follow.']);
     }
     public function unfollowApp(Request $request){
-        $appInfo = SaveTemp::where('id',$request->id)->first();
+        $appInfo = AppsInfo::where('id',$request->id)->first();
         AppsInfo::updateOrCreate(
             [
                 'appId' => $appInfo->appId
