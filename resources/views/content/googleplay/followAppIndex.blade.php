@@ -104,7 +104,7 @@
         { data: 'numberVoters' },
         { data: 'numberReviews' },
         { data: 'score' },
-        { data: 'action' }
+        { data: 'action',className: "text-center" }
       ],
       columnDefs: [
         {

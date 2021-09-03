@@ -149,7 +149,7 @@
         { data: 'numberVoters' },
         { data: 'numberReviews' },
         { data: 'score' },
-        { data: 'action' }
+        { data: 'action',className: "text-center" }
       ],
       columnDefs: [
         {
@@ -197,6 +197,15 @@
                     ' <img class="img-fluid banner_click" style="height: 100px; width: 200px" src="'+full.cover+'" alt="banner" />'+
                     '</div>' +
                     '</div>';
+          }
+        },
+        {
+          targets: 4,
+          responsivePriority: 1,
+          render: function (data, type, full, meta) {
+            // Creates full output for row
+            return '<a target="_blank" href='+full.developer_url +' ><span class="emp_name text-truncate font-weight-bold" style="color: #517f40">' +full.developer_name +'</span></a>'+
+                    '<p class="emp_name">' +full.summary +'</p>';
           }
         },
         {

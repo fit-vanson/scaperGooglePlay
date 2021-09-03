@@ -59,6 +59,7 @@ class GooglePlayController extends Controller
                     'appId' => $appInfo->getId(),
                     'name' => $appInfo->getName(),
                     'summary' => $appInfo->getSummary(),
+                    'developer' => json_encode($appInfo->getDeveloper()),
                     'cover' => $appInfo->getCover(),
                     'screenshots' =>$url_screenshot,
                     'size' =>$appInfo->getSize(),
@@ -117,7 +118,7 @@ class GooglePlayController extends Controller
                 if($record->checkExist->status == 1){
                      $action .= ' <div class="avatar avatar-status bg-light-warning">
                                     <span class="avatar-content">
-                                    <a href="javascript:void(0)" onclick="unfollowApp('.$record->id.')" class="btn-flat-warning">
+                                    <a href="javascript:void(0)" onclick="unfollowApp(\''.$record->appId.'\')" class="btn-flat-warning">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                                     </a>
                                     </span>
@@ -146,6 +147,7 @@ class GooglePlayController extends Controller
                                     </a>
                                 </div>';
             }
+
             $data_arr[] = array(
                 "idr" => '',
                 "id" => $record->id,
@@ -153,6 +155,8 @@ class GooglePlayController extends Controller
                 "appId"=>$record->appId,
                 "name"=>$record->name,
                 "summary"=>$record->summary,
+                "developer_url"=>json_decode($record->developer,true)['url'],
+                "developer_name"=>json_decode($record->developer,true)['name'],
                 "installs" => number_format($record->installs),
                 "numberVoters" =>number_format($record->numberVoters),
                 "numberReviews" => number_format($record->numberReviews),
@@ -192,15 +196,23 @@ class GooglePlayController extends Controller
         // Total records
         $totalRecords = AppsInfo::select('count(*) as allcount')->count();
         $totalRecordswithFilter = AppsInfo::select('count(*) as allcount')
-            ->where('name', 'like', '%' .$searchValue . '%')
-            ->where('status', '=',1)
-            ->orwhere('appId', 'like', '%' .$searchValue . '%')
+            ->where(function ($a) use ($searchValue) {
+                $a->where('name', 'like', '%' .$searchValue . '%')
+                    ->orwhere('appId', 'like', '%' .$searchValue . '%');
+            })
+            ->where(function ($q){
+                $q->where('status', '=',1);
+            })
             ->count();
-        // Fetch records
+
         $records = AppsInfo::orderBy($columnName,$columnSortOrder)
-            ->where('appId', 'like', '%' .$searchValue . '%')
-            ->where('status', '=',1)
-            ->orwhere('name', 'like', '%' .$searchValue . '%')
+            ->where(function ($a) use ($searchValue) {
+                $a->where('name', 'like', '%' .$searchValue . '%')
+                    ->orwhere('appId', 'like', '%' .$searchValue . '%');
+            })
+            ->where(function ($q){
+                $q->where('status', '=',1);
+            })
             ->select('*')
             ->skip($start)
             ->take($rowperpage)
@@ -218,7 +230,7 @@ class GooglePlayController extends Controller
 //                if($record->checkExist->status == 1){
                     $action .= ' <div class="avatar avatar-status bg-light-warning">
                                     <span class="avatar-content">
-                                    <a href="javascript:void(0)" onclick="unfollowApp('.$record->id.')" class="btn-flat-warning">
+                                    <a href="javascript:void(0)" onclick="unfollowApp(\''.$record->appId.'\')" class="btn-flat-warning">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                                     </a>
                                     </span>
@@ -408,17 +420,9 @@ class GooglePlayController extends Controller
         return response()->json(['success'=>'App đã được Follow.']);
     }
     public function unfollowApp(Request $request){
-        $appInfo = AppsInfo::where('id',$request->id)->first();
-        AppsInfo::updateOrCreate(
-            [
-                'appId' => $appInfo->appId
-            ],
-            [
-                'status' => 0
-            ]);
+        AppsInfo::where('appId',$request->id)->update(['status'=>0]);
         return response()->json([
             'success'=>'App đã được UnFollow.',
-            'appName' => $appInfo->name,
             ]);
     }
     public function detailApp(Request $request){
