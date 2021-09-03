@@ -100,8 +100,8 @@
       <div class="card">
         <div class="card-header d-flex flex-sm-row flex-column justify-content-md-between align-items-start justify-content-start">
           <div>
-              <h4 class="card-title">Line Chart</h4>
-              <span class="card-subtitle text-muted">Commercial networks</span>
+              <h4 class="card-title">Analytics</h4>
+              <span class="card-subtitle text-muted">Khảo sát theo key word</span>
           </div>
           <div class=" align-items-center">
             <form id="searchKeyForm" name="searchKeyForm">
