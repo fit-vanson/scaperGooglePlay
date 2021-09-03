@@ -18,14 +18,16 @@ use App\Http\Controllers\DashboardController;
 
 // Main Page Route
 // Route::get('/', [DashboardController::class,'dashboardEcommerce'])->name('dashboard-ecommerce')->middleware('verified');
-Route::get('/', [DashboardController::class,'dashboardEcommerce'])->name('dashboard-ecommerce');
+Route::get('/', [DashboardController::class,'dashboardAnalytics'])->name('dashboard-analytics');
 
 Auth::routes(['verify' => true]);
 
 /* Route Dashboards */
 Route::group(['prefix' => 'dashboard'], function () {
-  Route::get('analytics', [DashboardController::class,'dashboardAnalytics'])->name('dashboard-analytics');
-  Route::get('ecommerce', [DashboardController::class,'dashboardEcommerce'])->name('dashboard-ecommerce');
+    Route::group(['prefix' => 'analytics'], function () {
+        Route::get('/', [DashboardController::class, 'dashboardAnalytics'])->name('dashboard-analytics');
+        Route::get('/post-analytics', [DashboardController::class, 'analytics'])->name('dashboard-post-analytics');
+    });
 });
 /* Route Dashboards */
 
@@ -45,6 +47,7 @@ Route::group(['prefix' => 'googleplay'], function () {
     Route::get('/unfollowApp', [GooglePlayController::class,'unfollowApp'])->name('googleplay-unfollowApp');
     Route::get('/detail', [GooglePlayController::class,'detailApp'])->name('googleplay-detailApp');
     Route::get('/detail-ajax', [GooglePlayController::class,'detailApp_Ajax'])->name('googleplay-detailApp-Ajax');
+
 });
 // locale Route
 Route::get('lang/{locale}', [LanguageController::class, 'swap']);

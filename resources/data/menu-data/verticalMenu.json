@@ -11,12 +11,6 @@
           "name": "Analytics",
           "icon": "circle",
           "slug": "dashboard-analytics"
-        },
-        {
-          "url": "/",
-          "name": "eCommerce",
-          "icon": "circle",
-          "slug": "dashboard-ecommerce"
         }
       ]
     },

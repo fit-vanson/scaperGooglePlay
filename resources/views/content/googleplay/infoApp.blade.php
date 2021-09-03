@@ -311,9 +311,7 @@
     <script>
         $(window).on('load', function () {
             'use strict';
-            function formatNumber(num) {
-                return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-            }
+
             var id = window.location.search;
             var
                 barChartEx = $('.chartjs_Histogram_Rating');

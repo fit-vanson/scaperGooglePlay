@@ -9,12 +9,18 @@
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/extensions/toastr.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/datatables.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/responsive.bootstrap.min.css')) }}">
+  <link rel="stylesheet" href="{{ asset(mix('vendors/css/extensions/swiper.min.css')) }}">
+  <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/flatpickr/flatpickr.min.css')) }}">
+
 @endsection
 @section('page-style')
   <!-- Page css files -->
   <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/charts/chart-apex.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/extensions/ext-component-toastr.css')) }}">
+  <link rel="stylesheet" href="{{ asset(mix('css/base/pages/app-user.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('css/base/pages/app-invoice-list.css')) }}">
+  <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/extensions/ext-component-swiper.css')) }}">
+  <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-flat-pickr.css')) }}">
   @endsection
 
 @section('content')
@@ -85,156 +91,35 @@
     </div>
     <!-- Orders Chart Card ends -->
   </div>
+  <div class="row">
 
-  <div class="row match-height">
-    <!-- Avg Sessions Chart Card starts -->
-    <div class="col-lg-6 col-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="row pb-50">
-            <div class="col-sm-6 col-12 d-flex justify-content-between flex-column order-sm-1 order-2 mt-1 mt-sm-0">
-              <div class="mb-1 mb-sm-0">
-                <h2 class="font-weight-bolder mb-25">2.7K</h2>
-                <p class="card-text font-weight-bold mb-2">Avg Sessions</p>
-                <div class="font-medium-2">
-                  <span class="text-success mr-25">+5.2%</span>
-                  <span>vs last 7 days</span>
-                </div>
-              </div>
-              <button type="button" class="btn btn-primary">View Details</button>
-            </div>
-            <div class="col-sm-6 col-12 d-flex justify-content-between flex-column text-right order-sm-2 order-1">
-              <div class="dropdown chart-dropdown">
-                <button
-                  class="btn btn-sm border-0 dropdown-toggle p-50"
-                  type="button"
-                  id="dropdownItem5"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Last 7 Days
-                </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownItem5">
-                  <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-                  <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                  <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-                </div>
-              </div>
-              <div id="avg-sessions-chart"></div>
-            </div>
-          </div>
-          <hr />
-          <div class="row avg-sessions pt-50">
-            <div class="col-6 mb-2">
-              <p class="mb-50">Goal: $100000</p>
-              <div class="progress progress-bar-primary" style="height: 6px">
-                <div
-                  class="progress-bar"
-                  role="progressbar"
-                  aria-valuenow="50"
-                  aria-valuemin="50"
-                  aria-valuemax="100"
-                  style="width: 50%"
-                ></div>
-              </div>
-            </div>
-            <div class="col-6 mb-2">
-              <p class="mb-50">Users: 100K</p>
-              <div class="progress progress-bar-warning" style="height: 6px">
-                <div
-                  class="progress-bar"
-                  role="progressbar"
-                  aria-valuenow="60"
-                  aria-valuemin="60"
-                  aria-valuemax="100"
-                  style="width: 60%"
-                ></div>
-              </div>
-            </div>
-            <div class="col-6">
-              <p class="mb-50">Retention: 90%</p>
-              <div class="progress progress-bar-danger" style="height: 6px">
-                <div
-                  class="progress-bar"
-                  role="progressbar"
-                  aria-valuenow="70"
-                  aria-valuemin="70"
-                  aria-valuemax="100"
-                  style="width: 70%"
-                ></div>
-              </div>
-            </div>
-            <div class="col-6">
-              <p class="mb-50">Duration: 1yr</p>
-              <div class="progress progress-bar-success" style="height: 6px">
-                <div
-                  class="progress-bar"
-                  role="progressbar"
-                  aria-valuenow="90"
-                  aria-valuemin="90"
-                  aria-valuemax="100"
-                  style="width: 90%"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Avg Sessions Chart Card ends -->
+  </div>
+  <div class="row">
 
-    <!-- Support Tracker Chart Card starts -->
-    <div class="col-lg-6 col-12">
+    <div class="col-xl-12 col-lg-12">
       <div class="card">
-        <div class="card-header d-flex justify-content-between pb-0">
-          <h4 class="card-title">Support Tracker</h4>
-          <div class="dropdown chart-dropdown">
-            <button
-              class="btn btn-sm border-0 dropdown-toggle p-50"
-              type="button"
-              id="dropdownItem4"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Last 7 Days
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownItem4">
-              <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-            </div>
+        <div class="card-header d-flex flex-sm-row flex-column justify-content-md-between align-items-start justify-content-start">
+          <div>
+              <h4 class="card-title">Line Chart</h4>
+              <span class="card-subtitle text-muted">Commercial networks</span>
+          </div>
+          <div class=" align-items-center">
+            <form id="searchKeyForm" name="searchKeyForm">
+              <div class="form-group input-group input-group-merge">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i data-feather="search"></i></span>
+                </div>
+                <input type="text" class="form-control" id="input_search_key" name="input_search_key" placeholder="Search Key word..." />
+              </div>
+            </form>
           </div>
         </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-sm-2 col-12 d-flex flex-column flex-wrap text-center">
-              <h1 class="font-large-2 font-weight-bolder mt-2 mb-0">163</h1>
-              <p class="card-text">Tickets</p>
-            </div>
-            <div class="col-sm-10 col-12 d-flex justify-content-center">
-              <div id="support-trackers-chart"></div>
-            </div>
-          </div>
-          <div class="d-flex justify-content-between mt-1">
-            <div class="text-center">
-              <p class="card-text mb-50">New Tickets</p>
-              <span class="font-large-1 font-weight-bold">29</span>
-            </div>
-            <div class="text-center">
-              <p class="card-text mb-50">Open Tickets</p>
-              <span class="font-large-1 font-weight-bold">63</span>
-            </div>
-            <div class="text-center">
-              <p class="card-text mb-50">Response Time</p>
-              <span class="font-large-1 font-weight-bold">1d</span>
-            </div>
-          </div>
+          <div id="line-area-chart"></div>
+          <div id="line-chart"></div>
         </div>
       </div>
     </div>
-    <!-- Support Tracker Chart Card ends -->
   </div>
 
   <div class="row match-height">
@@ -506,9 +391,281 @@
   <script src="{{ asset(mix('vendors/js/tables/datatable/datatables.bootstrap4.min.js')) }}"></script>
   <script src="{{ asset(mix('vendors/js/tables/datatable/dataTables.responsive.min.js')) }}"></script>
   <script src="{{ asset(mix('vendors/js/tables/datatable/responsive.bootstrap.min.js')) }}"></script>
+
+  <script src="{{ asset(mix('vendors/js/charts/apexcharts.min.js')) }}"></script>
+  <script src="{{ asset(mix('vendors/js/charts/chart.min.js')) }}"></script>
+
+  <script src="{{ asset(mix('vendors/js/pickers/flatpickr/flatpickr.min.js')) }}"></script>
+
 @endsection
 @section('page-script')
   <!-- Page js files -->
   <script src="{{ asset(mix('js/scripts/pages/dashboard-analytics.js')) }}"></script>
   <script src="{{ asset(mix('js/scripts/pages/app-invoice-list.js')) }}"></script>
+  <script>
+    $(window).on('load', function () {
+
+      'use strict';
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+      var id = '?id=com.jokesall.girlsanimewallpaper';
+      var
+              barChartEx = $('.chartjs_Histogram_Rating');
+      // Color Variables
+      var successColorShade = '#28dac6',
+              tooltipShadow = 'rgba(0, 0, 0, 0.25)',
+              labelColor = '#6e6b7b',
+              grid_line_color = 'rgba(200, 200, 200, 0.2)'; // RGBA color helps in dark layout
+
+      var flatPicker = $('.flat-picker'),
+              isRtl = $('html').attr('data-textdirection') === 'rtl',
+              chartColors = {
+                column: {
+                  series1: '#826af9',
+                  series2: '#d2b0ff',
+                  bg: '#f8d3ff'
+                },
+                success: {
+                  shade_100: '#7eefc7',
+                  shade_200: '#06774f'
+                },
+                donut: {
+                  series1: '#ffe700',
+                  series2: '#00d4bd',
+                  series3: '#826bf8',
+                  series4: '#2b9bf4',
+                  series5: '#FFA1A1'
+                },
+                area: {
+                  series3: '#f2fa04',
+                  series2: '#001af6',
+                  series1: '#2bdac7'
+                }
+              };
+
+
+      // Detect Dark Layout
+      if ($('html').hasClass('dark-layout')) {
+        labelColor = '#b4b7bd';
+      }
+      var lineChartEl = document.querySelector('#line-chart'),
+              lineChartConfig = {
+                chart: {
+                  height: 800,
+                  // type: 'bar',
+                  zoomType: 'x,y',
+                  parentHeightOffset: 0,
+                  toolbar: {
+                    show: true
+                  }
+                },
+                series: [],
+                markers: {
+                  strokeWidth: 7,
+                  strokeOpacity: 1,
+                  strokeColors: [window.colors.solid.white],
+                  colors: [window.colors.solid.warning]
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'straight'
+                },
+                colors: [chartColors.area.series3, chartColors.area.series2, chartColors.area.series1],
+                grid: {
+                  padding: {
+                    top: +30
+                  }
+                },
+                tooltip: {
+                  x: {
+                    format: 'd MM yyyy'
+                  },
+
+
+                },
+                xaxis: {
+                  type: 'datetime',
+                  labels: {
+                    datetimeFormatter: {
+                      year: 'yyyy',
+                      month: 'MM yyyy',
+                      day: 'dd MM yyyy',
+                      hour: 'HH:mm'
+                    }
+                  },
+
+                },
+                yaxis: [
+                  {
+                    seriesName: 'Installs',
+                    axisTicks: {
+                      show: true,
+                    },
+                    axisBorder: {
+                      show: true,
+                    },
+                    // max:maxInstall,
+                    // min:minInstall
+
+                  },
+                  {
+                    opposite: true,
+                    seriesName: 'Vote',
+                    axisTicks: {
+                      show: true
+                    },
+                    axisBorder: {
+                      show: true,
+                    },
+                    // max:maxVote ,
+                    // min:minVote
+                  },
+                  {
+                    opposite: true,
+                    seriesName: 'Review',
+                    axisTicks: {
+                      show: true
+                    },
+                    axisBorder: {
+                      show: true,
+                    },
+                    // max:maxReview,
+                    // min:minReview
+                  },
+                ]
+              };
+      if (typeof lineChartEl !== undefined && lineChartEl !== null) {
+        var lineChart = new ApexCharts(lineChartEl, lineChartConfig);
+        lineChart.render();
+      }
+      $('#searchKeyForm').on('submit',function (event){
+        event.preventDefault();
+        $.ajax({
+          data: $('#searchKeyForm').serialize(),
+          url: "{{ route('dashboard-post-analytics') }}",
+          type: "GET",
+          dataType: 'json',
+          success: function (result) {
+            console.log(result)
+
+            lineChart.updateSeries([
+              {
+                name: 'Installs',
+                type: 'line',
+                data:result[0],
+
+              },
+              {
+                name: 'Vote',
+                type: 'line',
+                data:result[1],
+
+              },
+              {
+                name: 'Review',
+                type: 'line',
+                data:result[2]
+              },
+            ])
+
+            lineChart.updateOptions(
+                    {
+
+                    })
+
+          },
+        });
+      });
+      {{--$.ajax({--}}
+      {{--  type: 'get', //post method--}}
+      {{--  url: "{{route('googleplay-detailApp-Ajax')}}" +id,--}}
+      {{--  dataType: "json",--}}
+      {{--  success: function (result)--}}
+      {{--  {--}}
+      {{--    console.log((result[1]))--}}
+      {{--    var length_histogramRating = result[0].length;--}}
+      {{--    var histogramRating = result[0][length_histogramRating-1].histogramRating;--}}
+      {{--    histogramRating = [histogramRating.one,histogramRating.two,histogramRating.three,histogramRating.four,histogramRating.five];--}}
+      {{--    // chart.data.datasets = [{data: histogramRating,backgroundColor:successColorShade}];--}}
+      {{--    // chart.update();--}}
+      {{--    lineChart.updateSeries([--}}
+      {{--      {--}}
+      {{--        name: 'Installs',--}}
+      {{--        type: 'line',--}}
+      {{--        data:result[1],--}}
+
+      {{--      },--}}
+      {{--      {--}}
+      {{--        name: 'Vote',--}}
+      {{--        type: 'line',--}}
+      {{--        data:result[2],--}}
+
+      {{--      },--}}
+      {{--      {--}}
+      {{--        name: 'Review',--}}
+      {{--        type: 'line',--}}
+      {{--        data:result[3]--}}
+      {{--      },--}}
+      {{--    ])--}}
+      {{--    var maxInstall= Math.max.apply(Math, result[1].map(function(o) { return o.y; }));--}}
+      {{--    var minInstall= Math.min.apply(Math, result[1].map(function(o) { return o.y; }));--}}
+      {{--    var maxVote= Math.max.apply(Math, result[2].map(function(o) { return o.y; }));--}}
+      {{--    var minVote= Math.min.apply(Math, result[2].map(function(o) { return o.y; }));--}}
+      {{--    var maxReview= Math.max.apply(Math, result[3].map(function(o) { return o.y; }));--}}
+      {{--    var minReview= Math.min.apply(Math, result[3].map(function(o) { return o.y; }));--}}
+      {{--    lineChart.updateOptions(--}}
+      {{--            {--}}
+      {{--              yaxis: [--}}
+      {{--                {--}}
+      {{--                  seriesName: 'Installs',--}}
+      {{--                  axisTicks: {--}}
+      {{--                    show: true,--}}
+      {{--                  },--}}
+      {{--                  axisBorder: {--}}
+      {{--                    show: true,--}}
+      {{--                  },--}}
+      {{--                  max:maxInstall,--}}
+      {{--                  min:minInstall--}}
+
+      {{--                },--}}
+      {{--                {--}}
+      {{--                  opposite: true,--}}
+      {{--                  seriesName: 'Vote',--}}
+      {{--                  axisTicks: {--}}
+      {{--                    show: true--}}
+      {{--                  },--}}
+      {{--                  axisBorder: {--}}
+      {{--                    show: true,--}}
+      {{--                  },--}}
+      {{--                  max:maxVote ,--}}
+      {{--                  min:minVote--}}
+      {{--                },--}}
+      {{--                {--}}
+      {{--                  opposite: true,--}}
+      {{--                  seriesName: 'Review',--}}
+      {{--                  axisTicks: {--}}
+      {{--                    show: true--}}
+      {{--                  },--}}
+      {{--                  axisBorder: {--}}
+      {{--                    show: true,--}}
+      {{--                  },--}}
+      {{--                  max:maxReview,--}}
+      {{--                  min:minReview--}}
+      {{--                },--}}
+      {{--              ]--}}
+      {{--            })--}}
+
+
+      {{--  }--}}
+      {{--});--}}
+
+    });
+
+
+  </script>
 @endsection

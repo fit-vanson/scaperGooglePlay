@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'Dashboards' => 'Dashboards',
+    'Analytics' => 'Analytics',
     'Market' => 'Cửa hàng',
     'Google Play' => 'CH-Play',
     'Detail' => 'Chi tiết',
