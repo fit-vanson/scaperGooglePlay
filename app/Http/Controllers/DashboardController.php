@@ -47,8 +47,7 @@ class DashboardController extends Controller
               $tmp[$date]['numberVoters'][] = $entry["numberVoters"];
               $tmp[$date]['numberReviews'][] = $entry["numberReviews"];
           }
-          dd($tmp);
-          foreach( $tmp as $date => $item) {
+           foreach( $tmp as $date => $item) {
               $sum_installs = array_sum($item['installs']);
               $sum_numberVoters = array_sum($item['numberVoters']);
               $sum_numberReviews = array_sum($item['numberReviews']);
