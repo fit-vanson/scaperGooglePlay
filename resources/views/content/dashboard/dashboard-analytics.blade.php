@@ -473,7 +473,7 @@
       var lineChartEl = document.querySelector('#line-chart'),
               lineChartConfig = {
                 chart: {
-                  height: 800,
+                  height: 600,
                   // type: 'bar',
                   zoomType: 'x,y',
                   parentHeightOffset: 0,
