@@ -312,6 +312,32 @@
         $(window).on('load', function () {
             'use strict';
 
+            var labelFormatter = function(value) {
+                var val = Math.abs(value);
+                if (val >= 1000000) {
+                    val = (val / 1000000).toFixed(1) + "M";
+                }
+                if (val >= 1000) {
+                    val = (val / 1000).toFixed(1) + "K";
+                }
+                else {
+                    val = val.toFixed(1)
+                }
+                return val;
+            };
+            function addCommas(nStr)
+            {
+                nStr += '';
+                var x = nStr.split('.');
+                var x1 = x[0];
+                var x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+                return x1 + x2;
+            }
+
             var id = window.location.search;
             var
                 barChartEx = $('.chartjs_Histogram_Rating');
@@ -443,7 +469,11 @@
                         x: {
                             format: 'd MM yyyy'
                         },
-
+                        y: {
+                            formatter: function(value) {
+                                return addCommas(value.toFixed(1))
+                            }
+                        }
 
                     },
                     xaxis: {
@@ -512,7 +542,10 @@
                                             show: true,
                                         },
                                         max:maxInstall,
-                                        min:minInstall
+                                        min:minInstall,
+                                        labels: {
+                                            formatter: labelFormatter
+                                        },
 
                                     },
                                     {
@@ -525,7 +558,10 @@
                                             show: true,
                                         },
                                         max:maxVote ,
-                                        min:minVote
+                                        min:minVote,
+                                        labels: {
+                                            formatter: labelFormatter
+                                        },
                                     },
                                     {
                                         opposite: true,
@@ -537,7 +573,10 @@
                                             show: true,
                                         },
                                         max:maxReview,
-                                        min:minReview
+                                        min:minReview,
+                                        labels: {
+                                            formatter: labelFormatter
+                                        },
                                     },
                                 ]
                             })

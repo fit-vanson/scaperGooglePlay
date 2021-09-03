@@ -402,8 +402,7 @@
   <!-- Page js files -->
   <script src="{{ asset(mix('js/scripts/pages/dashboard-analytics.js')) }}"></script>
   <script src="{{ asset(mix('js/scripts/pages/app-invoice-list.js')) }}"></script>
-  <script>
-    $(window).on('load', function () {
+  <script>    $(window).on('load', function () {
 
       'use strict';
       $.ajaxSetup({
@@ -411,14 +410,35 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
-      var id = '?id=com.jokesall.girlsanimewallpaper';
-      var
-              barChartEx = $('.chartjs_Histogram_Rating');
+      var labelFormatter = function(value) {
+        var val = Math.abs(value);
+        if (val >= 1000000) {
+          val = (val / 1000000).toFixed(1) + "M";
+        }
+        if (val >= 1000) {
+          val = (val / 1000).toFixed(1) + "K";
+        }
+        return val;
+      };
+      function addCommas(nStr)
+      {
+        nStr += '';
+        var x = nStr.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+          x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+      }
+
       // Color Variables
       var successColorShade = '#28dac6',
               tooltipShadow = 'rgba(0, 0, 0, 0.25)',
               labelColor = '#6e6b7b',
-              grid_line_color = 'rgba(200, 200, 200, 0.2)'; // RGBA color helps in dark layout
+              grid_line_color = 'rgba(200, 200, 200, 0.2)';
+      // RGBA color helps in dark layout
 
       var flatPicker = $('.flat-picker'),
               isRtl = $('html').attr('data-textdirection') === 'rtl',
@@ -445,7 +465,6 @@
                   series1: '#2bdac7'
                 }
               };
-
 
       // Detect Dark Layout
       if ($('html').hasClass('dark-layout')) {
@@ -485,7 +504,11 @@
                   x: {
                     format: 'd MM yyyy'
                   },
-
+                  y: {
+                    formatter: function(value) {
+                      return addCommas(value.toFixed(1))
+                    }
+                  }
 
                 },
                 xaxis: {
@@ -509,33 +532,26 @@
                     axisBorder: {
                       show: true,
                     },
-                    // max:maxInstall,
-                    // min:minInstall
-
+                    labels: {
+                      formatter: labelFormatter
+                    },
                   },
                   {
-                    opposite: true,
-                    seriesName: 'Vote',
-                    axisTicks: {
-                      show: true
-                    },
-                    axisBorder: {
-                      show: true,
-                    },
-                    // max:maxVote ,
-                    // min:minVote
+                    seriesName: 'Review',
+                    show: false
                   },
                   {
                     opposite: true,
                     seriesName: 'Review',
                     axisTicks: {
-                      show: true
+                      show: false
                     },
                     axisBorder: {
-                      show: true,
+                      show: false,
                     },
-                    // max:maxReview,
-                    // min:minReview
+                    labels: {
+                      formatter: labelFormatter
+                    },
                   },
                 ]
               };
@@ -551,8 +567,6 @@
           type: "GET",
           dataType: 'json',
           success: function (result) {
-            console.log(result)
-
             lineChart.updateSeries([
               {
                 name: 'Installs',
@@ -572,100 +586,9 @@
                 data:result[2]
               },
             ])
-
-            lineChart.updateOptions(
-                    {
-
-                    })
-
           },
         });
       });
-      {{--$.ajax({--}}
-      {{--  type: 'get', //post method--}}
-      {{--  url: "{{route('googleplay-detailApp-Ajax')}}" +id,--}}
-      {{--  dataType: "json",--}}
-      {{--  success: function (result)--}}
-      {{--  {--}}
-      {{--    console.log((result[1]))--}}
-      {{--    var length_histogramRating = result[0].length;--}}
-      {{--    var histogramRating = result[0][length_histogramRating-1].histogramRating;--}}
-      {{--    histogramRating = [histogramRating.one,histogramRating.two,histogramRating.three,histogramRating.four,histogramRating.five];--}}
-      {{--    // chart.data.datasets = [{data: histogramRating,backgroundColor:successColorShade}];--}}
-      {{--    // chart.update();--}}
-      {{--    lineChart.updateSeries([--}}
-      {{--      {--}}
-      {{--        name: 'Installs',--}}
-      {{--        type: 'line',--}}
-      {{--        data:result[1],--}}
-
-      {{--      },--}}
-      {{--      {--}}
-      {{--        name: 'Vote',--}}
-      {{--        type: 'line',--}}
-      {{--        data:result[2],--}}
-
-      {{--      },--}}
-      {{--      {--}}
-      {{--        name: 'Review',--}}
-      {{--        type: 'line',--}}
-      {{--        data:result[3]--}}
-      {{--      },--}}
-      {{--    ])--}}
-      {{--    var maxInstall= Math.max.apply(Math, result[1].map(function(o) { return o.y; }));--}}
-      {{--    var minInstall= Math.min.apply(Math, result[1].map(function(o) { return o.y; }));--}}
-      {{--    var maxVote= Math.max.apply(Math, result[2].map(function(o) { return o.y; }));--}}
-      {{--    var minVote= Math.min.apply(Math, result[2].map(function(o) { return o.y; }));--}}
-      {{--    var maxReview= Math.max.apply(Math, result[3].map(function(o) { return o.y; }));--}}
-      {{--    var minReview= Math.min.apply(Math, result[3].map(function(o) { return o.y; }));--}}
-      {{--    lineChart.updateOptions(--}}
-      {{--            {--}}
-      {{--              yaxis: [--}}
-      {{--                {--}}
-      {{--                  seriesName: 'Installs',--}}
-      {{--                  axisTicks: {--}}
-      {{--                    show: true,--}}
-      {{--                  },--}}
-      {{--                  axisBorder: {--}}
-      {{--                    show: true,--}}
-      {{--                  },--}}
-      {{--                  max:maxInstall,--}}
-      {{--                  min:minInstall--}}
-
-      {{--                },--}}
-      {{--                {--}}
-      {{--                  opposite: true,--}}
-      {{--                  seriesName: 'Vote',--}}
-      {{--                  axisTicks: {--}}
-      {{--                    show: true--}}
-      {{--                  },--}}
-      {{--                  axisBorder: {--}}
-      {{--                    show: true,--}}
-      {{--                  },--}}
-      {{--                  max:maxVote ,--}}
-      {{--                  min:minVote--}}
-      {{--                },--}}
-      {{--                {--}}
-      {{--                  opposite: true,--}}
-      {{--                  seriesName: 'Review',--}}
-      {{--                  axisTicks: {--}}
-      {{--                    show: true--}}
-      {{--                  },--}}
-      {{--                  axisBorder: {--}}
-      {{--                    show: true,--}}
-      {{--                  },--}}
-      {{--                  max:maxReview,--}}
-      {{--                  min:minReview--}}
-      {{--                },--}}
-      {{--              ]--}}
-      {{--            })--}}
-
-
-      {{--  }--}}
-      {{--});--}}
-
     });
-
-
   </script>
 @endsection
