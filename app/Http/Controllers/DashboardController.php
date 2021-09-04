@@ -5,15 +5,33 @@ namespace App\Http\Controllers;
 use App\Models\AppsInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Nelexa\GPlay\GPlayApps;
 
 class DashboardController extends Controller
 {
-  // Dashboard - Analytics
-  public function dashboardAnalytics()
-  {
-    $pageConfigs = ['pageHeader' => false];
+    public function __construct() {
+        ini_set('max_execution_time',500);
 
-    return view('/content/dashboard/dashboard-analytics', ['pageConfigs' => $pageConfigs]);
+    }
+  // Dashboard - Analytics
+  public function dashboardAnalytics(Request  $request)
+  {
+      if($request->category){
+          $category = $request->category;
+          $topApps = $this->getTopApps($category);
+          return response()->json($topApps);
+      }
+      $totalAppFollow = AppsInfo::where('status', '=',1)->count();
+      $pageConfigs = ['pageHeader' => false];
+      $topApps = $this->getTopApps();
+      $Categories = $this->getCategories();
+
+    return view('/content/dashboard/dashboard-analytics', [
+        'pageConfigs' => $pageConfigs,
+        'Categories' =>$Categories,
+        'topApps' =>$topApps,
+        'totalAppFollow' =>$totalAppFollow
+        ]);
   }
 
   // Dashboard - Ecommerce
@@ -66,5 +84,30 @@ class DashboardController extends Controller
           }
           return response()->json([$installs,$votes,$reviews]);
       }
+  }
+  public function getCategories(){
+      $gplay = new GPlayApps();
+      $Categories = $gplay->getCategories();
+      foreach ($Categories as $category)
+      {
+          $arr_category[] = [
+              'id' => $category->getId(),
+              'name' => $category->getName(),
+          ];
+      }
+      return $arr_category;
+  }
+  public function getTopApps($category = null){
+      $gplay = new GPlayApps();
+      $topApps = $gplay->getTopApps($category,null,5);
+      foreach ($topApps as $app){
+          $arr_app[] = [
+              'url' => $app->getUrl(),
+              'icon' => $app->getIcon()->getUrl(),
+              'name' => $app->getName(),
+              'score'=> number_format($app->getScore(),1)
+          ];
+      }
+      return $arr_app;
   }
 }

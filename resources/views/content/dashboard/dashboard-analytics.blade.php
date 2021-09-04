@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/responsive.bootstrap.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/extensions/swiper.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/flatpickr/flatpickr.min.css')) }}">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 @endsection
 @section('page-style')
@@ -21,6 +22,7 @@
   <link rel="stylesheet" href="{{ asset(mix('css/base/pages/app-invoice-list.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/extensions/ext-component-swiper.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-flat-pickr.css')) }}">
+
   @endsection
 
 @section('content')
@@ -58,20 +60,20 @@
     <!-- Greetings Card ends -->
 
     <!-- Subscribers Chart Card starts -->
-    <div class="col-lg-3 col-sm-6 col-12">
-      <div class="card">
-        <div class="card-header flex-column align-items-start pb-0">
-          <div class="avatar bg-light-primary p-50 m-0">
-            <div class="avatar-content">
-              <i data-feather="users" class="font-medium-5"></i>
-            </div>
-          </div>
-          <h2 class="font-weight-bolder mt-1">92.6k</h2>
-          <p class="card-text">Subscribers Gained</p>
-        </div>
-        <div id="gained-chart"></div>
-      </div>
-    </div>
+{{--    <div class="col-lg-3 col-sm-6 col-12">--}}
+{{--      <div class="card">--}}
+{{--        <div class="card-header flex-column align-items-start pb-0">--}}
+{{--          <div class="avatar bg-light-primary p-50 m-0">--}}
+{{--            <div class="avatar-content">--}}
+{{--              <i data-feather="users" class="font-medium-5"></i>--}}
+{{--            </div>--}}
+{{--          </div>--}}
+{{--          <h2 class="font-weight-bolder mt-1">92.6k</h2>--}}
+{{--          <p class="card-text">Subscribers Gained</p>--}}
+{{--        </div>--}}
+{{--        <div id="gained-chart"></div>--}}
+{{--      </div>--}}
+{{--    </div>--}}
     <!-- Subscribers Chart Card ends -->
 
     <!-- Orders Chart Card starts -->
@@ -83,19 +85,171 @@
               <i data-feather="package" class="font-medium-5"></i>
             </div>
           </div>
-          <h2 class="font-weight-bolder mt-1">38.4K</h2>
-          <p class="card-text">Orders Received</p>
+          <h2 class="font-weight-bolder mt-1">{{$totalAppFollow}}</h2>
+          <p class="card-text">App đang theo dõi</p>
+          <a href="{{route('googleplay-follow-app')}}">Chi tiết</a>
         </div>
         <div id="order-chart"></div>
       </div>
     </div>
     <!-- Orders Chart Card ends -->
   </div>
-  <div class="row">
+  <div class="row match-height">
+    <!-- Browser States Card -->
+    <div class="col-lg-4 col-md-6 col-12">
+      <div class="card card-browser-states">
+        <div class="card-header">
+          <div>
+            <h4 class="card-title">Top App</h4>
+          </div>
+          <div class="col-lg-5">
+            <select class="select2-size-sm form-control" id="select_category" onchange="chooseCategory()">
+              <option>All</option>
+              @foreach($Categories as $Category)
+                <option value="{{$Category['id']}}">{{$Category['name']}}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+        <div class="card-body" id="top_app">
+          @foreach($topApps as $app)
+          <div class="browser-states">
+            <div class="media">
+              <img
+                      src="{{$app['icon']}}"
+                      class="rounded mr-1"
+                      height="30"
+                      alt="{{$app['name']}}"
+              />
+              <a href="{{$app['url']}}" target="_blank" ><h6 class="align-self-center mb-0">{{$app['name']}}</h6></a>
+            </div>
+            <div class="d-flex align-items-center">
+              <div class="font-weight-bold text-body-heading mr-1">{{$app['score']}}</div>
+              <div id="browser-state-chart-primary"></div>
+            </div>
+          </div>
+          @endforeach
 
+        </div>
+      </div>
+    </div>
+    <!--/ Browser States Card -->
+
+    <!-- Goal Overview Card -->
+    <div class="col-lg-4 col-md-6 col-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="card-title">Goal Overview</h4>
+          <i data-feather="help-circle" class="font-medium-3 text-muted cursor-pointer"></i>
+        </div>
+        <div class="card-body p-0">
+          <div id="goal-overview-radial-bar-chart" class="my-2"></div>
+          <div class="row border-top text-center mx-0">
+            <div class="col-6 border-right py-1">
+              <p class="card-text text-muted mb-0">Completed</p>
+              <h3 class="font-weight-bolder mb-0">786,617</h3>
+            </div>
+            <div class="col-6 py-1">
+              <p class="card-text text-muted mb-0">In Progress</p>
+              <h3 class="font-weight-bolder mb-0">13,561</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/ Goal Overview Card -->
+
+    <!-- Transaction Card -->
+    <div class="col-lg-4 col-md-6 col-12">
+      <div class="card card-transaction">
+        <div class="card-header">
+          <h4 class="card-title">Transactions</h4>
+          <div class="dropdown chart-dropdown">
+            <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-toggle="dropdown"></i>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
+              <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+              <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="transaction-item">
+            <div class="media">
+              <div class="avatar bg-light-primary rounded">
+                <div class="avatar-content">
+                  <i data-feather="pocket" class="avatar-icon font-medium-3"></i>
+                </div>
+              </div>
+              <div class="media-body">
+                <h6 class="transaction-title">Wallet</h6>
+                <small>Starbucks</small>
+              </div>
+            </div>
+            <div class="font-weight-bolder text-danger">- $74</div>
+          </div>
+          <div class="transaction-item">
+            <div class="media">
+              <div class="avatar bg-light-success rounded">
+                <div class="avatar-content">
+                  <i data-feather="check" class="avatar-icon font-medium-3"></i>
+                </div>
+              </div>
+              <div class="media-body">
+                <h6 class="transaction-title">Bank Transfer</h6>
+                <small>Add Money</small>
+              </div>
+            </div>
+            <div class="font-weight-bolder text-success">+ $480</div>
+          </div>
+          <div class="transaction-item">
+            <div class="media">
+              <div class="avatar bg-light-danger rounded">
+                <div class="avatar-content">
+                  <i data-feather="dollar-sign" class="avatar-icon font-medium-3"></i>
+                </div>
+              </div>
+              <div class="media-body">
+                <h6 class="transaction-title">Paypal</h6>
+                <small>Add Money</small>
+              </div>
+            </div>
+            <div class="font-weight-bolder text-success">+ $590</div>
+          </div>
+          <div class="transaction-item">
+            <div class="media">
+              <div class="avatar bg-light-warning rounded">
+                <div class="avatar-content">
+                  <i data-feather="credit-card" class="avatar-icon font-medium-3"></i>
+                </div>
+              </div>
+              <div class="media-body">
+                <h6 class="transaction-title">Mastercard</h6>
+                <small>Ordered Food</small>
+              </div>
+            </div>
+            <div class="font-weight-bolder text-danger">- $23</div>
+          </div>
+          <div class="transaction-item">
+            <div class="media">
+              <div class="avatar bg-light-info rounded">
+                <div class="avatar-content">
+                  <i data-feather="trending-up" class="avatar-icon font-medium-3"></i>
+                </div>
+              </div>
+              <div class="media-body">
+                <h6 class="transaction-title">Transfer</h6>
+                <small>Refund</small>
+              </div>
+            </div>
+            <div class="font-weight-bolder text-success">+ $98</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/ Transaction Card -->
   </div>
   <div class="row">
-
     <div class="col-xl-12 col-lg-12">
       <div class="card">
         <div class="card-header d-flex flex-sm-row flex-column justify-content-md-between align-items-start justify-content-start">
@@ -396,20 +550,44 @@
   <script src="{{ asset(mix('vendors/js/charts/chart.min.js')) }}"></script>
 
   <script src="{{ asset(mix('vendors/js/pickers/flatpickr/flatpickr.min.js')) }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 
 @endsection
 @section('page-script')
   <!-- Page js files -->
-  <script src="{{ asset(mix('js/scripts/pages/dashboard-analytics.js')) }}"></script>
-  <script src="{{ asset(mix('js/scripts/pages/app-invoice-list.js')) }}"></script>
-  <script>    $(window).on('load', function () {
 
+
+  <script>
+    function chooseCategory() {
+      var id = document.getElementById("select_category").value;
+      $.get('{{route('dashboard-analytics')}}/?category='+id,function (data) {
+
+        var html = '';
+        data.forEach(function(item, index, array) {
+          console.log(item.name)
+          html += ' <div class="browser-states">'+
+                  '<div class="media">'+
+                  '<img src="'+item.icon+'" class="rounded mr-1" height="30" alt="'+item.name+'"/>'+
+                  '<a href="'+item.url+'" target="_blank"><h6 class="align-self-center mb-0">'+item.name+'</h6></a>'+
+        '</div>'+
+        '<div class="d-flex align-items-center">'+
+        '<div class="font-weight-bold text-body-heading mr-1">'+item.score+'</div>'+
+        '<div id="browser-state-chart-primary"></div>'+
+        '</div></div>';
+        })
+        $('#top_app').html(html);
+
+      })
+    }
+    $(window).on('load', function () {
       'use strict';
       $.ajaxSetup({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+      $('#select_category').select2();
       var labelFormatter = function(value) {
         var val = Math.abs(value);
         if (val >= 1000000) {
@@ -432,6 +610,8 @@
         }
         return x1 + x2;
       }
+
+
 
       // Color Variables
       var successColorShade = '#28dac6',

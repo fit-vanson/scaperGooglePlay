@@ -194,7 +194,7 @@ class GooglePlayController extends Controller
         $searchValue = $search_arr['value']; // Search value
 
         // Total records
-        $totalRecords = AppsInfo::select('count(*) as allcount')->count();
+        $totalRecords = AppsInfo::where('status', '=',1)->count();
         $totalRecordswithFilter = AppsInfo::select('count(*) as allcount')
             ->where(function ($a) use ($searchValue) {
                 $a->where('name', 'like', '%' .$searchValue . '%')
