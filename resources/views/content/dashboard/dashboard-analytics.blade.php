@@ -136,117 +136,117 @@
     <!--/ Browser States Card -->
 
     <!-- Goal Overview Card -->
-    <div class="col-lg-4 col-md-6 col-12">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h4 class="card-title">Goal Overview</h4>
-          <i data-feather="help-circle" class="font-medium-3 text-muted cursor-pointer"></i>
-        </div>
-        <div class="card-body p-0">
-          <div id="goal-overview-radial-bar-chart" class="my-2"></div>
-          <div class="row border-top text-center mx-0">
-            <div class="col-6 border-right py-1">
-              <p class="card-text text-muted mb-0">Completed</p>
-              <h3 class="font-weight-bolder mb-0">786,617</h3>
-            </div>
-            <div class="col-6 py-1">
-              <p class="card-text text-muted mb-0">In Progress</p>
-              <h3 class="font-weight-bolder mb-0">13,561</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--/ Goal Overview Card -->
+{{--    <div class="col-lg-4 col-md-6 col-12">--}}
+{{--      <div class="card">--}}
+{{--        <div class="card-header d-flex justify-content-between align-items-center">--}}
+{{--          <h4 class="card-title">Goal Overview</h4>--}}
+{{--          <i data-feather="help-circle" class="font-medium-3 text-muted cursor-pointer"></i>--}}
+{{--        </div>--}}
+{{--        <div class="card-body p-0">--}}
+{{--          <div id="goal-overview-radial-bar-chart" class="my-2"></div>--}}
+{{--          <div class="row border-top text-center mx-0">--}}
+{{--            <div class="col-6 border-right py-1">--}}
+{{--              <p class="card-text text-muted mb-0">Completed</p>--}}
+{{--              <h3 class="font-weight-bolder mb-0">786,617</h3>--}}
+{{--            </div>--}}
+{{--            <div class="col-6 py-1">--}}
+{{--              <p class="card-text text-muted mb-0">In Progress</p>--}}
+{{--              <h3 class="font-weight-bolder mb-0">13,561</h3>--}}
+{{--            </div>--}}
+{{--          </div>--}}
+{{--        </div>--}}
+{{--      </div>--}}
+{{--    </div>--}}
+{{--    <!--/ Goal Overview Card -->--}}
 
-    <!-- Transaction Card -->
-    <div class="col-lg-4 col-md-6 col-12">
-      <div class="card card-transaction">
-        <div class="card-header">
-          <h4 class="card-title">Transactions</h4>
-          <div class="dropdown chart-dropdown">
-            <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-toggle="dropdown"></i>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="transaction-item">
-            <div class="media">
-              <div class="avatar bg-light-primary rounded">
-                <div class="avatar-content">
-                  <i data-feather="pocket" class="avatar-icon font-medium-3"></i>
-                </div>
-              </div>
-              <div class="media-body">
-                <h6 class="transaction-title">Wallet</h6>
-                <small>Starbucks</small>
-              </div>
-            </div>
-            <div class="font-weight-bolder text-danger">- $74</div>
-          </div>
-          <div class="transaction-item">
-            <div class="media">
-              <div class="avatar bg-light-success rounded">
-                <div class="avatar-content">
-                  <i data-feather="check" class="avatar-icon font-medium-3"></i>
-                </div>
-              </div>
-              <div class="media-body">
-                <h6 class="transaction-title">Bank Transfer</h6>
-                <small>Add Money</small>
-              </div>
-            </div>
-            <div class="font-weight-bolder text-success">+ $480</div>
-          </div>
-          <div class="transaction-item">
-            <div class="media">
-              <div class="avatar bg-light-danger rounded">
-                <div class="avatar-content">
-                  <i data-feather="dollar-sign" class="avatar-icon font-medium-3"></i>
-                </div>
-              </div>
-              <div class="media-body">
-                <h6 class="transaction-title">Paypal</h6>
-                <small>Add Money</small>
-              </div>
-            </div>
-            <div class="font-weight-bolder text-success">+ $590</div>
-          </div>
-          <div class="transaction-item">
-            <div class="media">
-              <div class="avatar bg-light-warning rounded">
-                <div class="avatar-content">
-                  <i data-feather="credit-card" class="avatar-icon font-medium-3"></i>
-                </div>
-              </div>
-              <div class="media-body">
-                <h6 class="transaction-title">Mastercard</h6>
-                <small>Ordered Food</small>
-              </div>
-            </div>
-            <div class="font-weight-bolder text-danger">- $23</div>
-          </div>
-          <div class="transaction-item">
-            <div class="media">
-              <div class="avatar bg-light-info rounded">
-                <div class="avatar-content">
-                  <i data-feather="trending-up" class="avatar-icon font-medium-3"></i>
-                </div>
-              </div>
-              <div class="media-body">
-                <h6 class="transaction-title">Transfer</h6>
-                <small>Refund</small>
-              </div>
-            </div>
-            <div class="font-weight-bolder text-success">+ $98</div>
-          </div>
-        </div>
-      </div>
-    </div>
+{{--    <!-- Transaction Card -->--}}
+{{--    <div class="col-lg-4 col-md-6 col-12">--}}
+{{--      <div class="card card-transaction">--}}
+{{--        <div class="card-header">--}}
+{{--          <h4 class="card-title">Transactions</h4>--}}
+{{--          <div class="dropdown chart-dropdown">--}}
+{{--            <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-toggle="dropdown"></i>--}}
+{{--            <div class="dropdown-menu dropdown-menu-right">--}}
+{{--              <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>--}}
+{{--              <a class="dropdown-item" href="javascript:void(0);">Last Month</a>--}}
+{{--              <a class="dropdown-item" href="javascript:void(0);">Last Year</a>--}}
+{{--            </div>--}}
+{{--          </div>--}}
+{{--        </div>--}}
+{{--        <div class="card-body">--}}
+{{--          <div class="transaction-item">--}}
+{{--            <div class="media">--}}
+{{--              <div class="avatar bg-light-primary rounded">--}}
+{{--                <div class="avatar-content">--}}
+{{--                  <i data-feather="pocket" class="avatar-icon font-medium-3"></i>--}}
+{{--                </div>--}}
+{{--              </div>--}}
+{{--              <div class="media-body">--}}
+{{--                <h6 class="transaction-title">Wallet</h6>--}}
+{{--                <small>Starbucks</small>--}}
+{{--              </div>--}}
+{{--            </div>--}}
+{{--            <div class="font-weight-bolder text-danger">- $74</div>--}}
+{{--          </div>--}}
+{{--          <div class="transaction-item">--}}
+{{--            <div class="media">--}}
+{{--              <div class="avatar bg-light-success rounded">--}}
+{{--                <div class="avatar-content">--}}
+{{--                  <i data-feather="check" class="avatar-icon font-medium-3"></i>--}}
+{{--                </div>--}}
+{{--              </div>--}}
+{{--              <div class="media-body">--}}
+{{--                <h6 class="transaction-title">Bank Transfer</h6>--}}
+{{--                <small>Add Money</small>--}}
+{{--              </div>--}}
+{{--            </div>--}}
+{{--            <div class="font-weight-bolder text-success">+ $480</div>--}}
+{{--          </div>--}}
+{{--          <div class="transaction-item">--}}
+{{--            <div class="media">--}}
+{{--              <div class="avatar bg-light-danger rounded">--}}
+{{--                <div class="avatar-content">--}}
+{{--                  <i data-feather="dollar-sign" class="avatar-icon font-medium-3"></i>--}}
+{{--                </div>--}}
+{{--              </div>--}}
+{{--              <div class="media-body">--}}
+{{--                <h6 class="transaction-title">Paypal</h6>--}}
+{{--                <small>Add Money</small>--}}
+{{--              </div>--}}
+{{--            </div>--}}
+{{--            <div class="font-weight-bolder text-success">+ $590</div>--}}
+{{--          </div>--}}
+{{--          <div class="transaction-item">--}}
+{{--            <div class="media">--}}
+{{--              <div class="avatar bg-light-warning rounded">--}}
+{{--                <div class="avatar-content">--}}
+{{--                  <i data-feather="credit-card" class="avatar-icon font-medium-3"></i>--}}
+{{--                </div>--}}
+{{--              </div>--}}
+{{--              <div class="media-body">--}}
+{{--                <h6 class="transaction-title">Mastercard</h6>--}}
+{{--                <small>Ordered Food</small>--}}
+{{--              </div>--}}
+{{--            </div>--}}
+{{--            <div class="font-weight-bolder text-danger">- $23</div>--}}
+{{--          </div>--}}
+{{--          <div class="transaction-item">--}}
+{{--            <div class="media">--}}
+{{--              <div class="avatar bg-light-info rounded">--}}
+{{--                <div class="avatar-content">--}}
+{{--                  <i data-feather="trending-up" class="avatar-icon font-medium-3"></i>--}}
+{{--                </div>--}}
+{{--              </div>--}}
+{{--              <div class="media-body">--}}
+{{--                <h6 class="transaction-title">Transfer</h6>--}}
+{{--                <small>Refund</small>--}}
+{{--              </div>--}}
+{{--            </div>--}}
+{{--            <div class="font-weight-bolder text-success">+ $98</div>--}}
+{{--          </div>--}}
+{{--        </div>--}}
+{{--      </div>--}}
+{{--    </div>--}}
     <!--/ Transaction Card -->
   </div>
   <div class="row">
@@ -276,260 +276,7 @@
     </div>
   </div>
 
-  <div class="row match-height">
-    <!-- Timeline Card -->
-    <div class="col-lg-4 col-12">
-      <div class="card card-user-timeline">
-        <div class="card-header">
-          <div class="d-flex align-items-center">
-            <i data-feather="list" class="user-timeline-title-icon"></i>
-            <h4 class="card-title">User Timeline</h4>
-          </div>
-        </div>
-        <div class="card-body">
-          <ul class="timeline ml-50 mb-0">
-            <li class="timeline-item">
-              <span class="timeline-point timeline-point-indicator"></span>
-              <div class="timeline-event">
-                <h6>12 Invoices have been paid</h6>
-                <p>Invoices are paid to the company</p>
-                <div class="media align-items-center">
-                  <img class="mr-1" src="{{asset('images/icons/json.png')}}" alt="data.json" height="23" />
-                  <h6 class="media-body mb-0">data.json</h6>
-                </div>
-              </div>
-            </li>
-            <li class="timeline-item">
-              <span class="timeline-point timeline-point-warning timeline-point-indicator"></span>
-              <div class="timeline-event">
-                <h6>Client Meeting</h6>
-                <p>Project meeting with Carl</p>
-                <div class="media align-items-center">
-                  <div class="avatar mr-50">
-                    <img
-                      src="{{asset('images/portrait/small/avatar-s-9.jpg')}}"
-                      alt="Avatar"
-                      width="38"
-                      height="38"
-                    />
-                  </div>
-                  <div class="media-body">
-                    <h6 class="mb-0">Carl Roy (Client)</h6>
-                    <p class="mb-0">CEO of Infibeam</p>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="timeline-item">
-              <span class="timeline-point timeline-point-info timeline-point-indicator"></span>
-              <div class="timeline-event">
-                <h6>Create a new project</h6>
-                <p>Add files to new design folder</p>
-                <div class="avatar-group">
-                  <div
-                    data-toggle="tooltip"
-                    data-popup="tooltip-custom"
-                    data-placement="bottom"
-                    data-original-title="Billy Hopkins"
-                    class="avatar pull-up"
-                  >
-                    <img
-                      src="{{asset('images/portrait/small/avatar-s-9.jpg')}}"
-                      alt="Avatar"
-                      width="33"
-                      height="33"
-                    />
-                  </div>
-                  <div
-                    data-toggle="tooltip"
-                    data-popup="tooltip-custom"
-                    data-placement="bottom"
-                    data-original-title="Amy Carson"
-                    class="avatar pull-up"
-                  >
-                    <img
-                      src="{{asset('images/portrait/small/avatar-s-6.jpg')}}"
-                      alt="Avatar"
-                      width="33"
-                      height="33"
-                    />
-                  </div>
-                  <div
-                    data-toggle="tooltip"
-                    data-popup="tooltip-custom"
-                    data-placement="bottom"
-                    data-original-title="Brandon Miles"
-                    class="avatar pull-up"
-                  >
-                    <img
-                      src="{{asset('images/portrait/small/avatar-s-8.jpg')}}"
-                      alt="Avatar"
-                      width="33"
-                      height="33"
-                    />
-                  </div>
-                  <div
-                    data-toggle="tooltip"
-                    data-popup="tooltip-custom"
-                    data-placement="bottom"
-                    data-original-title="Daisy Weber"
-                    class="avatar pull-up"
-                  >
-                    <img
-                      src="{{asset('images/portrait/small/avatar-s-7.jpg')}}"
-                      alt="Avatar"
-                      width="33"
-                      height="33"
-                    />
-                  </div>
-                  <div
-                    data-toggle="tooltip"
-                    data-popup="tooltip-custom"
-                    data-placement="bottom"
-                    data-original-title="Jenny Looper"
-                    class="avatar pull-up"
-                  >
-                    <img
-                      src="{{asset('images/portrait/small/avatar-s-20.jpg')}}"
-                      alt="Avatar"
-                      width="33"
-                      height="33"
-                    />
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="timeline-item">
-              <span class="timeline-point timeline-point-danger timeline-point-indicator"></span>
-              <div class="timeline-event">
-                <h6>Update project for client</h6>
-                <p class="mb-0">Update files as per new design</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <!--/ Timeline Card -->
 
-    <!-- Sales Stats Chart Card starts -->
-    <div class="col-lg-4 col-md-6 col-12">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-start pb-1">
-          <div>
-            <h4 class="card-title mb-25">Sales</h4>
-            <p class="card-text">Last 6 months</p>
-          </div>
-          <div class="dropdown chart-dropdown">
-            <i data-feather="more-vertical" class="font-medium-3 cursor-pointer" data-toggle="dropdown"></i>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="d-inline-block mr-1">
-            <div class="d-flex align-items-center">
-              <i data-feather="circle" class="font-small-3 text-primary mr-50"></i>
-              <h6 class="mb-0">Sales</h6>
-            </div>
-          </div>
-          <div class="d-inline-block">
-            <div class="d-flex align-items-center">
-              <i data-feather="circle" class="font-small-3 text-info mr-50"></i>
-              <h6 class="mb-0">Visits</h6>
-            </div>
-          </div>
-          <div id="sales-visit-chart" class="mt-50"></div>
-        </div>
-      </div>
-    </div>
-    <!-- Sales Stats Chart Card ends -->
-
-    <!-- App Design Card -->
-    <div class="col-lg-4 col-md-6 col-12">
-      <div class="card card-app-design">
-        <div class="card-body">
-          <div class="badge badge-light-primary">03 Sep, 20</div>
-          <h4 class="card-title mt-1 mb-75 pt-25">App design</h4>
-          <p class="card-text font-small-2 mb-2">
-            You can Find Only Post and Quotes Related to IOS like ipad app design, iphone app design
-          </p>
-          <div class="design-group mb-2 pt-50">
-            <h6 class="section-label">Team</h6>
-            <div class="badge badge-light-warning mr-1">Figma</div>
-            <div class="badge badge-light-primary">Wireframe</div>
-          </div>
-          <div class="design-group pt-25">
-            <h6 class="section-label">Members</h6>
-            <div class="avatar">
-              <img src="{{asset('images/portrait/small/avatar-s-9.jpg')}}" width="34" height="34" alt="Avatar" />
-            </div>
-            <div class="avatar bg-light-danger">
-              <div class="avatar-content">PI</div>
-            </div>
-            <div class="avatar">
-              <img
-                src="{{asset('images/portrait/small/avatar-s-14.jpg')}}"
-                width="34"
-                height="34"
-                alt="Avatar"
-              />
-            </div>
-            <div class="avatar">
-              <img src="{{asset('images/portrait/small/avatar-s-7.jpg')}}" width="34" height="34" alt="Avatar" />
-            </div>
-            <div class="avatar bg-light-secondary">
-              <div class="avatar-content">AL</div>
-            </div>
-          </div>
-          <div class="design-planning-wrapper mb-2 py-75">
-            <div class="design-planning">
-              <p class="card-text mb-25">Due Date</p>
-              <h6 class="mb-0">12 Apr, 21</h6>
-            </div>
-            <div class="design-planning">
-              <p class="card-text mb-25">Budget</p>
-              <h6 class="mb-0">$49251.91</h6>
-            </div>
-            <div class="design-planning">
-              <p class="card-text mb-25">Cost</p>
-              <h6 class="mb-0">$840.99</h6>
-            </div>
-          </div>
-          <button type="button" class="btn btn-primary btn-block">Join Team</button>
-        </div>
-      </div>
-    </div>
-    <!--/ App Design Card -->
-  </div>
-
-  <!-- List DataTable -->
-  <div class="row">
-    <div class="col-12">
-      <div class="card invoice-list-wrapper">
-        <div class="card-datatable table-responsive">
-          <table class="invoice-list-table table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>#</th>
-                <th><i data-feather="trending-up"></i></th>
-                <th>Clieáádasdasdasnt</th>
-                <th>Total</th>
-                <th class="text-truncate">Issued Date</th>
-                <th>Balance</th>
-                <th>Invoice Status</th>
-                <th class="cell-fit">Actions</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
   <!--/ List DataTable -->
 </section>
 <!-- Dashboard Analytics end -->
