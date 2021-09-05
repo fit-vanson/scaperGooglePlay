@@ -205,7 +205,9 @@
           render: function (data, type, full, meta) {
             // Creates full output for row
             return '<a target="_blank" href='+full.developer_url +' ><span class="emp_name text-truncate font-weight-bold" style="color: #517f40">' +full.developer_name +'</span></a>'+
-                    '<p class="emp_name">' +full.summary +'</p>';
+                    '<p class="emp_name">' +full.summary +'</p>'+
+                    '<p class="emp_name">Released: ' +full.released +'</p>'+
+                    '<p class="emp_name">Updated: ' +full.updated +'</p>';
           }
         },
         {

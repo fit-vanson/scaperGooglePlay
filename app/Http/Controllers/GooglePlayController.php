@@ -52,6 +52,12 @@ class GooglePlayController extends Controller
             foreach ($screenshots as $screenshot){
                 $url_screenshot[] = $screenshot->getUrl();
             }
+            if($appInfo->getReleased() != null){
+                $released = $appInfo->getReleased()->getTimestamp();
+            }
+            if($appInfo->getUpdated() != null){
+                $updated = $appInfo->getUpdated()->getTimestamp();
+            }
             $url_screenshot = json_encode($url_screenshot);
             SaveTemp::updateOrCreate(
                 [
@@ -69,6 +75,8 @@ class GooglePlayController extends Controller
                     'numberReviews' => $appInfo->getNumberReviews(),
                     'offersIAPCost' => $appInfo->isContainsIAP(),
                     'containsAds' => $appInfo->isContainsAds(),
+                    'released' => $released ,
+                    'updated' => $updated
                 ]);
         }
         return response()->json(['success'=>'Thành công.']);
@@ -147,6 +155,16 @@ class GooglePlayController extends Controller
                                     </a>
                                 </div>';
             }
+            if($record->released != null){
+                $released = date('d-m-Y',$record->released);
+            }else{
+                $released ='null';
+            }
+            if($record->updated != null){
+                $updated = date('d-m-Y',$record->updated);
+            }else{
+                $updated ='null';
+            }
 
             $data_arr[] = array(
                 "idr" => '',
@@ -165,7 +183,9 @@ class GooglePlayController extends Controller
                 "cover" =>$record->cover,
                 "offersIAPCost" =>$record->offersIAPCost,
                 "containsAds" =>$record->containsAds,
-                "size" =>$record->size,
+                "size" => $record->size,
+                "released" => $released,
+                "updated" => $updated,
                 "screenshots" =>json_decode($record->screenshots,true),
             );
         }
