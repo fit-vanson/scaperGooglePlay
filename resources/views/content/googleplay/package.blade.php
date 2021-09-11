@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/flatpickr/flatpickr.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/extensions/swiper.min.css')) }}">
   <link rel="stylesheet" href="{{asset('vendors/css/extensions/toastr.min.css')}}">
-  <!-- x-editable -->
-  <link rel="stylesheet" href="{{asset('vendors/css/x-editable/bootstrap-editable.css')}}">
+
+
 
 @endsection
 @section('page-style')
@@ -117,7 +117,6 @@
 
 @section('page-script')
   <script src="{{ asset(mix('vendors/js/extensions/sweetalert2.all.min.js')) }}"></script>
-  <script src="{{ asset(('vendors/js/x-editable/bootstrap-editable.min.js')) }}"></script>
   <script src="{{ asset(('js/scripts/googleplay/clipboard.js')) }}"></script>
 
 
