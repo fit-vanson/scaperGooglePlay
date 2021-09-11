@@ -352,8 +352,6 @@
       e.preventDefault();
       const row = table.row(e.target.closest('tr'));
       const rowData = row.data();
-      console.log(rowData)
-
       $('#modelHeading').html(rowData.name);
       $('#id').val(rowData.appId);
       $('#note').val(rowData.note);
