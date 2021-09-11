@@ -1,16 +1,33 @@
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog">
         <div class="modal-content panel-warning">
             <div class="modal-header panel-heading">
                 <h4 class="modal-title" id="modelHeading"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="swiper-responsive-breakpoints swiper-container">
+                <div class="row input_note">
+                    <div class="card-body">
+                        <form class="form change_note" id="change_note">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="hidden" name="id" id="id">
+                                        <label for="first-name-vertical">Ghi chú</label>
+                                        <textarea type="text" rows="5" id="note" class="form-control" name="note"> </textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary mr-1 waves-effect waves-float waves-light">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="swiper-responsive-breakpoints swiper-container input_screenshot_img">
                     <div class="swiper-wrapper" id="screenshot_img">
                         <div class="swiper-slide">
-
                         </div>
                     </div>
                     <!-- Add Pagination -->

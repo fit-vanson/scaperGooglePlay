@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/flatpickr/flatpickr.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/extensions/swiper.min.css')) }}">
   <link rel="stylesheet" href="{{asset('vendors/css/extensions/toastr.min.css')}}">
+  <!-- x-editable -->
+  <link rel="stylesheet" href="{{asset('vendors/css/x-editable/bootstrap-editable.css')}}">
+
 @endsection
 @section('page-style')
   {{--   Page Css files--}}
@@ -24,6 +27,10 @@
   <link rel="stylesheet" type="text/css" href="{{asset('css/base/plugins/forms/pickers/form-flat-pickr.css')}}">
   <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/extensions/ext-component-swiper.css')) }}">
   <link rel="stylesheet" href="{{asset('css/base/plugins/extensions/ext-component-toastr.css')}}">
+
+
+
+
 @endsection
 
 @section('content')
@@ -68,6 +75,7 @@
                   <th>Votes</th>
                   <th>Reviews</th>
                   <th>Score</th>
+                  <th>Note</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -109,7 +117,10 @@
 
 @section('page-script')
   <script src="{{ asset(mix('vendors/js/extensions/sweetalert2.all.min.js')) }}"></script>
+  <script src="{{ asset(('vendors/js/x-editable/bootstrap-editable.min.js')) }}"></script>
   <script src="{{ asset(('js/scripts/googleplay/clipboard.js')) }}"></script>
+
+
 
   <script type="text/javascript">
     $.ajaxSetup({
@@ -128,8 +139,7 @@
         clickable: true
       },
     });
-
-    var table=$('.datatables-basic').DataTable({
+    var table = $('.datatables-basic').DataTable({
       displayLength: 250,
       lengthMenu: [20,50, 100, 250, 500],
       serverSide: true,
@@ -149,9 +159,14 @@
         { data: 'numberVoters' },
         { data: 'numberReviews' },
         { data: 'score' },
-        { data: 'action',className: "text-center" }
+        { data: 'note',className: "change-note" },
+        { data: 'action',className: "text-center" },
       ],
       columnDefs: [
+        // {
+        //   targets: [10],
+        //   createdCell: createdCell
+        // },
         {
           // For Responsive
           className: 'control',
@@ -232,8 +247,10 @@
             return $size + '<br> <br> IAP: ' + $offersIAPCost + '<br> <br> ADS: '+ $containsAds
           }
         },
+
       ],
       order: [[6, 'desc']],
+
       dom:
               '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       buttons: [
@@ -331,7 +348,20 @@
         loadingIndicator: true
       },
     });
+    table.on('click', 'td:nth-child(10)', e=> {
+      e.preventDefault();
+      const row = table.row(e.target.closest('tr'));
+      const rowData = row.data();
+      console.log(rowData)
 
+      $('#modelHeading').html(rowData.name);
+      $('#id').val(rowData.appId);
+      $('#note').val(rowData.note);
+      $('#myModal').modal('show');
+      $('.input_screenshot_img').hide();
+      $('.input_note').show();
+      $('.modal-dialog').prop('class','modal-dialog modal-xm')
+    });
     table.on('click', '.banner_click', e=> {
       e.preventDefault();
       const row = table.row(e.target.closest('tr'));
@@ -343,6 +373,9 @@
                 '</div>';
       })
       document.getElementById("screenshot_img").innerHTML = a;
+      $('.input_screenshot_img').show();
+      $('.input_note').hide();
+      $('.modal-dialog').prop('class','modal-dialog modal-xl')
       $('#modelHeading').html(rowData.name);
       $('#myModal').modal('show');
       $('#myModal').on('shown.bs.modal', function(e) {
@@ -356,7 +389,7 @@
       $.post('{{asset('googleplay/followApp')}}?id='+rowData.appId,function (data)
       {
         $('.modal').modal('hide');
-        toastr['success']('', 'Theo dõi thành công!');
+        toastr['success']('Theo dõi thành công!');
         table.draw();
       })
     });
@@ -383,6 +416,20 @@
         type: "POST",
         dataType: 'json',
         success: function (data) {
+          table.draw();
+        },
+      });
+    });
+    $('#change_note').on('submit',function (event){
+      event.preventDefault();
+      $.ajax({
+        data: $('#change_note').serialize(),
+        url: "{{ route('googleplay-change-note') }}",
+        type: "POST",
+        dataType: 'json',
+        success: function (data) {
+          $('#myModal').modal('hide');
+          toastr['success']('Thành công!');
           table.draw();
         },
       });

@@ -47,6 +47,7 @@ Route::group(['prefix' => 'googleplay'], function () {
     Route::get('/unfollowApp', [GooglePlayController::class,'unfollowApp'])->name('googleplay-unfollowApp');
     Route::get('/detail', [GooglePlayController::class,'detailApp'])->name('googleplay-detailApp');
     Route::get('/detail-ajax', [GooglePlayController::class,'detailApp_Ajax'])->name('googleplay-detailApp-Ajax');
+    Route::POST('/change-note', [GooglePlayController::class,'changeNote'])->name('googleplay-change-note');
 
 });
 // locale Route

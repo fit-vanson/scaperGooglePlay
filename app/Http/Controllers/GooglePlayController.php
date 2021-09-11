@@ -115,6 +115,7 @@ class GooglePlayController extends Controller
             ->get();
         $data_arr = array();
         foreach($records as $record){
+            $note = '';
             $action = '<div class="avatar avatar-status bg-light-primary">
                                     <span class="avatar-content">                                  
                                         <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-primary showLink">
@@ -123,6 +124,7 @@ class GooglePlayController extends Controller
                                     </span>
                                 </div>';
             if($record->checkExist != null){
+                $note = $record->checkExist->note;
                 if($record->checkExist->status == 1){
                      $action .= ' <div class="avatar avatar-status bg-light-warning">
                                     <span class="avatar-content">
@@ -147,6 +149,7 @@ class GooglePlayController extends Controller
                                 </span>
                              </div>';
             }
+
             else{
                 $action .= ' <div class="avatar avatar-status bg-light-secondary">
                                     <span class="avatar-content">
@@ -186,6 +189,7 @@ class GooglePlayController extends Controller
                 "size" => $record->size,
                 "released" => $released,
                 "updated" => $updated,
+                "note" => $note,
                 "screenshots" =>json_decode($record->screenshots,true),
             );
         }
@@ -354,15 +358,13 @@ class GooglePlayController extends Controller
             echo '<br/>'.'Chưa đến giờ Cron';
         }
     }
-    public function followApp(Request $request){
+    public function followApp(Request $request, $note=null){
         ini_set('max_execution_time',500);
         $gplay = new GPlayApps();
 
         if(is_array($request->id)){
             $appId = $request->id;
             $appsInfo = $gplay->getAppsInfo($appId);
-
-
         }else{
             $appId[] = $request->id;
             $appsInfo = $gplay->getAppsInfo($appId);
@@ -431,6 +433,7 @@ class GooglePlayController extends Controller
                     'description' => $appInfo->getDescription(),
                     'released' => $appInfo->getReleased(),
                     'data' => $json_data,
+                    'note' => $note,
                     'reviews' => $json_review,
                     'offersIAPCost' => $appInfo->isContainsIAP(),
                     'containsAds' => $appInfo->isContainsAds(),
@@ -486,6 +489,10 @@ class GooglePlayController extends Controller
         return view('content.googleplay.choose',[
             'appsChoose' => $appsChoose
         ]);
+    }
+    public function changeNote(Request $request){
+        $this->followApp($request,$request->note);
+        return response()->json(['success'=>'Thành công']);
     }
 
 }
