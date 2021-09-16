@@ -12,6 +12,7 @@ class DashboardController extends Controller
 {
     public function __construct() {
         ini_set('max_execution_time',500);
+        ini_set('memory_limit', '10024M');
     }
   // Dashboard - Analytics
   public function dashboardAnalytics(Request  $request)
