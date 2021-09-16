@@ -320,9 +320,6 @@
                 if (val >= 1000) {
                     val = (val / 1000).toFixed(1) + "K";
                 }
-                else {
-                    val = val.toFixed(1)
-                }
                 return val;
             };
             function addCommas(nStr)

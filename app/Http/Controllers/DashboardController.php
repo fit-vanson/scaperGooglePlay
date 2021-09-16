@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AppsInfo;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Nelexa\GPlay\GPlayApps;
@@ -11,7 +12,6 @@ class DashboardController extends Controller
 {
     public function __construct() {
         ini_set('max_execution_time',500);
-
     }
   // Dashboard - Analytics
   public function dashboardAnalytics(Request  $request)
@@ -21,16 +21,26 @@ class DashboardController extends Controller
           $topApps = $this->getTopApps($category);
           return response()->json($topApps);
       }
+      if($request->key){
+          $key = $request->key;
+          $topGrowths = $this->getTopGrowths(7,$key,5);
+          return response()->json($topGrowths);
+      }
       $totalAppFollow = AppsInfo::where('status', '=',1)->count();
       $pageConfigs = ['pageHeader' => false];
       $topApps = $this->getTopApps();
       $Categories = $this->getCategories();
+      $topGrowths = $this->getTopGrowths(7,'installs',5);
+
+
+
 
     return view('/content/dashboard/dashboard-analytics', [
         'pageConfigs' => $pageConfigs,
         'Categories' =>$Categories,
         'topApps' =>$topApps,
-        'totalAppFollow' =>$totalAppFollow
+        'totalAppFollow' =>$totalAppFollow,
+        'topGrowths' =>$topGrowths
         ]);
   }
 
@@ -55,6 +65,7 @@ class DashboardController extends Controller
               $data_arr=array_merge($data_arr,$data);
 
           }
+
           $tmp = array();
           foreach( $data_arr as $entry  ) {
               $date = $entry["date"];
@@ -110,4 +121,41 @@ class DashboardController extends Controller
       }
       return $arr_app;
   }
+
+  public function getTopGrowths($time,$key,$limit){
+        $apps = AppsInfo::where('status',1)->get();
+        foreach ($apps as $app){
+            $data = json_decode($app->data,true);
+            $tmp = array();
+            foreach( $data as $entry  ) {
+                $date = $entry["date"];
+                if( !array_key_exists( $date, $tmp ) ) {
+                    $tmp[$date] = array();
+                }
+                $tmp[$date] = $entry[$key];
+            }
+            if( array_key_exists( Carbon::now()->format('Y-m-d'), $tmp ) & array_key_exists( Carbon::now()->subDay($time)->format('Y-m-d'), $tmp ) ) {
+                $currentTime = $tmp[Carbon::now()->format('Y-m-d')];
+                $setTime = $tmp[Carbon::now()->subDay($time)->format('Y-m-d')];
+                $result = $currentTime -$setTime;
+                if($setTime > 0){
+                    $percent = $result/$setTime * 100;
+                }
+
+                $arr_app[] =[
+                    'appId' => $app->appId,
+                    'icon' => $app->logo,
+                    'name' => $app->name,
+                    'result'=> $result,
+                    'percent' =>$percent
+                ];
+            }
+        }
+      $keys = array_column($arr_app, 'result');
+      array_multisort($keys, SORT_DESC, $arr_app);
+
+      $arr_app = array_slice($arr_app, 0, $limit);
+      return $arr_app;
+  }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AppsInfo;
+use App\Models\KeyWords;
 use App\Models\SaveTemp;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -45,6 +46,14 @@ class GooglePlayController extends Controller
         $input_search = $request->input_search;
         $gplay = new GPlayApps();
         $appsInfo = $gplay->search($input_search,250);
+        $searchSuggests = $gplay->getSearchSuggestions($input_search);
+        foreach ($searchSuggests as $searchSuggest){
+            KeyWords::updateOrCreate(
+                [
+                    'keyword' =>$searchSuggest
+                ]
+            );
+        }
         foreach ($appsInfo as $appInfo){
             $appInfo =  $gplay->getAppInfo($appInfo->getId());
             $screenshots = $appInfo->getScreenshots();
@@ -78,6 +87,7 @@ class GooglePlayController extends Controller
                     'released' => $released ,
                     'updated' => $updated
                 ]);
+
         }
         return response()->json(['success'=>'Thành công.']);
     }
