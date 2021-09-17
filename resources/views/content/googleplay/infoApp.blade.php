@@ -464,7 +464,7 @@
                     },
                     tooltip: {
                         x: {
-                            format: 'd MM yyyy'
+                            format: 'dd MM yyyy'
                         },
                         y: {
                             formatter: function(value) {

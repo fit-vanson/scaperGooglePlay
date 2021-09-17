@@ -125,17 +125,17 @@
             <h4 class="card-title">Top Growth</h4>
           </div>
           <div class="col-lg-5">
-            <select class="select2-size-sm form-control" id="select_key" onchange="chooseKey()">
+            <select class="select2-size-sm form-control" id="select_key" onchange="chooseGrowth()">
                 <option value="installs">Installs</option>
                 <option value="numberVoters">Voters</option>
                 <option value="numberReviews">Reviews</option>
             </select>
           </div>
           <div class="col-lg-3">
-            <select class="select2-size-sm form-control" id="select_date" onchange="chooseDate()">
-              <option value="installs">7 ngày</option>
-              <option value="numberVoters">30 ngày</option>
-              <option value="numberReviews">Từ đầu</option>
+            <select class="select2-size-sm form-control" id="select_date" onchange="chooseGrowth()">
+              <option value="7">7 ngày</option>
+              <option value="15">15 ngày</option>
+              <option value="30">30 ngày</option>
             </select>
           </div>
         </div>
@@ -143,13 +143,15 @@
           @foreach($topGrowths as $app)
             <div class="browser-states">
               <div class="media">
-                <img
-                        src="{{$app['icon']}}"
-                        class="rounded mr-1"
-                        height="30"
-                        alt="{{$app['name']}}"
-                />
-                <a href="https://play.google.com/store/apps/details?id={{$app['appId']}}" target="_blank" ><h6 class="align-self-center mb-0">{{$app['name']}}</h6></a>
+                <a href="https://play.google.com/store/apps/details?id={{$app['appId']}}" target="_blank" >
+                  <img
+                          src="{{$app['icon']}}"
+                          class="rounded mr-1"
+                          height="30"
+                          alt="{{$app['name']}}"
+                  />
+                </a>
+                <a href="{{route('googleplay-detailApp')}}?id={{$app['appId']}}" target="_blank" ><h6 class="align-self-center mb-0">{{$app['name']}}</h6></a>
               </div>
               <div class="d-flex align-items-center">
                 <div class="font-weight-bold text-body-heading mr-1">{{number_format($app['result'])}} <p class="text-success">+{{number_format($app['percent'],2)}}%</p></div>
@@ -241,16 +243,18 @@
 
       })
     }
-    function chooseKey() {
-      var id = document.getElementById("select_key").value;
-      $.get('{{route('dashboard-analytics')}}/?key='+id,function (data) {
+    function chooseGrowth() {
+      var key = document.getElementById("select_key").value;
+      var date = document.getElementById("select_date").value;
+      $.get('{{route('dashboard-analytics')}}/?key='+key+'&date='+date,function (data) {
 
         var html = '';
         data.forEach(function(item, index, array) {
-          html += ' <div class="browser-states">'+
+          html += '<div class="browser-states">'+
                   '<div class="media">'+
-                  '<img src="'+item.icon+'" class="rounded mr-1" height="30" alt="'+item.name+'"/>'+
-                  '<a href="https://play.google.com/store/apps/details?id='+item.appId+'" target="_blank"><h6 class="align-self-center mb-0">'+item.name+'</h6></a>'+
+                  '<a href="https://play.google.com/store/apps/details?id='+item.appId+'" target="_blank" >'+
+                  '<img src="'+item.icon+'" class="rounded mr-1" height="30" alt="'+item.name+'"/></a>'+
+                  '<a href="googleplay/detail?id='+item.appId+'" target="_blank"><h6 class="align-self-center mb-0">'+item.name+'</h6></a>'+
                   '</div>'+
                   '<div class="d-flex align-items-center">'+
                   '<div class="font-weight-bold text-body-heading mr-1">'+item.result.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})+' <p class="text-success">+'+item.percent.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})+'%</p></div>'+
@@ -339,6 +343,11 @@
                     show: true
                   }
                 },
+                noData: {
+                  text: "No data ...",
+                  align: "center",
+                  verticalAlign: "middle",
+                },
                 series: [],
                 markers: {
                   strokeWidth: 7,
@@ -360,7 +369,7 @@
                 },
                 tooltip: {
                   x: {
-                    format: 'd MM yyyy'
+                    format: 'dd MM yyyy'
                   },
                   y: {
                     formatter: function(value) {
@@ -425,25 +434,30 @@
           type: "GET",
           dataType: 'json',
           success: function (result) {
-            lineChart.updateSeries([
-              {
-                name: 'Installs',
-                type: 'line',
-                data:result[0],
+            console.log(result.length)
+            if(result.length >0) {
+              lineChart.updateSeries([
+                {
+                  name: 'Installs',
+                  type: 'line',
+                  data:result[0],
 
-              },
-              {
-                name: 'Vote',
-                type: 'line',
-                data:result[1],
+                },
+                {
+                  name: 'Vote',
+                  type: 'line',
+                  data:result[1],
 
-              },
-              {
-                name: 'Review',
-                type: 'line',
-                data:result[2]
-              },
-            ])
+                },
+                {
+                  name: 'Review',
+                  type: 'line',
+                  data:result[2]
+                },
+              ])
+            }else {
+              lineChart.updateSeries([])
+            }
           },
         });
       });

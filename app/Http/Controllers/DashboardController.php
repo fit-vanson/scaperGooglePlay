@@ -17,14 +17,16 @@ class DashboardController extends Controller
   // Dashboard - Analytics
   public function dashboardAnalytics(Request  $request)
   {
+
       if($request->category){
           $category = $request->category;
           $topApps = $this->getTopApps($category);
           return response()->json($topApps);
       }
-      if($request->key){
+      if($request->key & $request->date){
           $key = $request->key;
-          $topGrowths = $this->getTopGrowths(7,$key,5);
+          $date = $request->date;
+          $topGrowths = $this->getTopGrowths($date,$key,5);
           return response()->json($topGrowths);
       }
       $totalAppFollow = AppsInfo::where('status', '=',1)->count();
@@ -32,9 +34,6 @@ class DashboardController extends Controller
       $topApps = $this->getTopApps();
       $Categories = $this->getCategories();
       $topGrowths = $this->getTopGrowths(7,'installs',5);
-
-
-
 
     return view('/content/dashboard/dashboard-analytics', [
         'pageConfigs' => $pageConfigs,
@@ -48,7 +47,6 @@ class DashboardController extends Controller
   // Dashboard - Ecommerce
   public function dashboardEcommerce()
   {
-//      dd(Session::all());
     $pageConfigs = ['pageHeader' => false];
 
     return view('/content/dashboard/dashboard-ecommerce', ['pageConfigs' => $pageConfigs]);
@@ -60,11 +58,10 @@ class DashboardController extends Controller
             ->orwhere('name', 'like', '%' .$key_word . '%')
             ->get();
       $data_arr = array();
-      if($records){
+      if(count($records)>0){
           foreach ($records as $record){
               $data = json_decode($record->data,true);
               $data_arr=array_merge($data_arr,$data);
-
           }
 
           $tmp = array();
@@ -77,6 +74,7 @@ class DashboardController extends Controller
               $tmp[$date]['numberVoters'][] = $entry["numberVoters"];
               $tmp[$date]['numberReviews'][] = $entry["numberReviews"];
           }
+          ksort($tmp);
            foreach( $tmp as $date => $item) {
               $sum_installs = array_sum($item['installs']);
               $sum_numberVoters = array_sum($item['numberVoters']);
@@ -95,6 +93,8 @@ class DashboardController extends Controller
               ];
           }
           return response()->json([$installs,$votes,$reviews]);
+      }else{
+          return response()->json();
       }
   }
   public function getCategories(){
@@ -142,7 +142,6 @@ class DashboardController extends Controller
                 if($setTime > 0){
                     $percent = $result/$setTime * 100;
                 }
-
                 $arr_app[] =[
                     'appId' => $app->appId,
                     'icon' => $app->logo,
@@ -154,7 +153,6 @@ class DashboardController extends Controller
         }
       $keys = array_column($arr_app, 'result');
       array_multisort($keys, SORT_DESC, $arr_app);
-
       $arr_app = array_slice($arr_app, 0, $limit);
       return $arr_app;
   }

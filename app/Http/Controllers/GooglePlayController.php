@@ -260,8 +260,7 @@ class GooglePlayController extends Controller
                                         </a>
                                     </span>
                                 </div>';
-//            if($record->checkExist != null){
-//                if($record->checkExist->status == 1){
+
                     $action .= ' <div class="avatar avatar-status bg-light-warning">
                                     <span class="avatar-content">
                                     <a href="javascript:void(0)" onclick="unfollowApp(\''.$record->appId.'\')" class="btn-flat-warning">
@@ -269,14 +268,7 @@ class GooglePlayController extends Controller
                                     </a>
                                     </span>
                                 </div>';
-//                }else{
-//                    $action .= ' <div class="avatar avatar-status bg-light-secondary">
-//                                    <span class="avatar-content">
-//                                       <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-secondary followApp">
-//                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
-//                                    </a>
-//                                </div>';
-//                }
+
                 $action .= ' <div class="avatar avatar-status bg-light-info">
                                  <span class="avatar-content">
                                     <a href="../googleplay/detail?id='.$record->appId.'" target="_blank" class="btn-flat-info">
@@ -284,17 +276,8 @@ class GooglePlayController extends Controller
                                     </a>
                                 </span>
                              </div>';
-//            }
-//            else{
-//                $action .= ' <div class="avatar avatar-status bg-light-secondary">
-//                                    <span class="avatar-content">
-//                                    <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-secondary followApp">
-//                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
-//                                    </a>
-//                                </div>';
-//            }
+
             $data = json_decode($record->data,true);
-//            dd($data[0]);
             $data_arr[] = array(
                 "idr" => '',
                 "id" => $record->id,
@@ -307,10 +290,6 @@ class GooglePlayController extends Controller
                 "numberReviews" => number_format($data[0]['numberReviews']),
                 "score" => number_format($data[0]['score'],1),
                 "action" => $action,
-//                "cover" =>$record->cover,
-//                "offersIAPCost" =>$record->offersIAPCost,
-//                "containsAds" =>$record->containsAds,
-//                "size" =>$record->size,
                 "screenshots" =>json_decode($record->screenshots,true),
             );
         }
@@ -360,7 +339,6 @@ class GooglePlayController extends Controller
                     [
                         'data' => $dataApp,
                         'updated_at'=>time()
-
                     ]);
 
             }
@@ -473,6 +451,8 @@ class GooglePlayController extends Controller
     public function detailApp_Ajax(Request $request){
         $appInfo = AppsInfo::where('appId',$request->id)->first();
         $data = json_decode($appInfo->data,true);
+        $keys = array_column($data, 'date');
+        array_multisort($keys, SORT_DESC, $data);
         foreach ($data as $item){
             $histogramRating [] =[
                 'histogramRating' => $item['histogramRating']
