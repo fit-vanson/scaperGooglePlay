@@ -257,7 +257,7 @@
                   '<a href="googleplay/detail?id='+item.appId+'" target="_blank"><h6 class="align-self-center mb-0">'+item.name+'</h6></a>'+
                   '</div>'+
                   '<div class="d-flex align-items-center">'+
-                  '<div class="font-weight-bold text-body-heading mr-1">'+item.result.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})+' <p class="text-success">+'+item.percent.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})+'%</p></div>'+
+                  '<div class="font-weight-bold text-body-heading mr-1">'+item.result.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})+' <p class="text-success">+'+item.percent.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})+'%</p></div>'+
                   '<div id="browser-state-chart-primary"></div>'+
                   '</div></div>';
         })
