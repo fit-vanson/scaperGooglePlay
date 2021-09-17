@@ -349,7 +349,6 @@ class GooglePlayController extends Controller
     public function followApp(Request $request, $note=null){
         ini_set('max_execution_time',500);
         $gplay = new GPlayApps();
-
         if(is_array($request->id)){
             $appId = $request->id;
             $appsInfo = $gplay->getAppsInfo($appId);
