@@ -38,6 +38,7 @@
                 <th style=" width:15%">Votes</th>
                 <th style=" width:15%">Reviews</th>
                 <th style=" width:15%">Score</th>
+                <th style=" width:15%">Note</th>
                 <th style=" width:10%">Action</th>
               </tr>
               </thead>
@@ -104,6 +105,7 @@
         { data: 'numberVoters' },
         { data: 'numberReviews' },
         { data: 'score' },
+        { data: 'note' },
         { data: 'action',className: "text-center" }
       ],
       columnDefs: [

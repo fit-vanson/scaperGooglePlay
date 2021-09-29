@@ -466,6 +466,7 @@ class GooglePlayController extends Controller
                 "numberVoters" =>number_format($data[0]['numberVoters']),
                 "numberReviews" => number_format($data[0]['numberReviews']),
                 "score" => number_format($data[0]['score'],1),
+                "note" => $record->note,
                 "action" => $action,
                 "screenshots" =>json_decode($record->screenshots,true),
             );
