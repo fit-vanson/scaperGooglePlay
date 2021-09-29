@@ -105,7 +105,7 @@
         { data: 'numberVoters' },
         { data: 'numberReviews' },
         { data: 'score' },
-        { data: 'note' },
+        { data: 'note',className: "change-note" },
         { data: 'action',className: "text-center" }
       ],
       columnDefs: [
@@ -150,24 +150,6 @@
                     full.logo + '"></a>';
           }
         },
-        // {
-        //   targets: 4,
-        //   responsivePriority: 1,
-        //   render: function (data, type, full, meta) {
-        //     // Creates full output for row
-        //     var $row_output =
-        //             '<div class="d-flex flex-column">' +
-        //             '<span class="emp_name text-truncate font-weight-bold">' +
-        //             full['name'] +
-        //             '</span>' +
-        //             '<small class="emp_post text-truncate text-muted">' +
-        //             full['appId'] +
-        //             '</small>' +
-        //             '</div>';
-        //     return  "<div class='text-wrap width-300'>" + $row_output + "</div>";
-        //     // $row_output;
-        //   }
-        // },
         {
           responsivePriority: 4,
           targets: 9
@@ -265,6 +247,18 @@
         }
       }
     });
+    table.on('click', '.change-note', e=> {
+      e.preventDefault();
+      const row = table.row(e.target.closest('tr'));
+      const rowData = row.data();
+      $('#modelHeading').html(rowData.name);
+      $('#id').val(rowData.appId);
+      $('#note').val(rowData.note);
+      $('#myModal').modal('show');
+      $('.input_screenshot_img').hide();
+      $('.input_note').show();
+      $('.modal-dialog').prop('class','modal-dialog modal-xm')
+    });
     $('div.head-label').html('<h6 class="mb-0">Tìm kiếm Ứng dụng</h6>');
 
     $(document).on('click','.followApp', function (data) {
@@ -316,25 +310,21 @@
         },
       });
     });
-    $(document)
-            .ajaxStart(function () {
-              $.blockUI({
-                message:
-                        '<div class="d-flex justify-content-center align-items-center"><p class="mr-50 mb-0">Please wait...</p> <div class="spinner-grow spinner-grow-sm text-white" role="status"></div> </div>',
+    $('#change_note').on('submit',function (event){
+      event.preventDefault();
+      $.ajax({
+        data: $('#change_note').serialize(),
+        url: "{{ route('googleplay-change-note') }}",
+        type: "POST",
+        dataType: 'json',
+        success: function (data) {
+          $('#myModal').modal('hide');
+          toastr['success']('Thành công!');
+          table.draw();
+        },
+      });
+    });
 
-                css: {
-                  backgroundColor: 'transparent',
-                  color: '#fff',
-                  border: '0'
-                },
-                overlayCSS: {
-                  opacity: 0.5
-                }
-              });
-            })
-            .ajaxStop(function () {
-              $.unblockUI();
-            });
     function unfollowApp(id) {
       $.get('{{asset('googleplay/unfollowApp')}}?id='+id,function (data)
       {
