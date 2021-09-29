@@ -38,6 +38,9 @@ Route::group(['prefix' => 'googleplay'], function () {
     Route::get('/', [GooglePlayController::class,'index'])->name('googleplay-index');
     Route::get('/follow-app', [GooglePlayController::class,'followAppIndex'])->name('googleplay-follow-app');
     Route::get('/package', [GooglePlayController::class,'package'])->name('googleplay-package');
+    Route::get('/filter_app_list', [GooglePlayController::class,'filter_app_list'])->name('googleplay-filter-app-list');
+    Route::post('/get-filter_app_list', [GooglePlayController::class,'get_filter_app_list'])->name('googleplay-get-filter-app-list');
+    Route::post('/post-filter_app_list', [GooglePlayController::class,'post_filter_app_list'])->name('googleplay-post-filter-app');
     Route::post('/getIndex', [GooglePlayController::class,'getIndex'])->name('googleplay-get-index');
     Route::post('/getfollowAppIndex', [GooglePlayController::class,'getFollowAppIndex'])->name('googleplay-get-follow-appIndex');
     Route::post('/post', [GooglePlayController::class,'postIndex'])->name('googleplay-post-index');

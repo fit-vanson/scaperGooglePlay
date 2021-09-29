@@ -43,6 +43,12 @@
           "name": "Filter App",
           "icon": "circle",
           "slug": "googleplay-package"
+        },
+        {
+          "url": "googleplay/filter_app_list",
+          "name": "Filter App List",
+          "icon": "circle",
+          "slug": "googleplay-filter-app-list"
         }
       ]
     }

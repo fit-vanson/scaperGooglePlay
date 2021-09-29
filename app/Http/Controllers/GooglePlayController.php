@@ -30,6 +30,17 @@ class GooglePlayController extends Controller
             'breadcrumbs' => $breadcrumbs
         ]);
     }
+
+    public function filter_app_list(){
+        {
+            $breadcrumbs = [
+                ['link' => "/", 'name' => "Home"], ['link' => "googleplay/", 'name' => "Google Play"],['name' => "Package"]
+            ];
+            return view('/content/googleplay/filter', [
+                'breadcrumbs' => $breadcrumbs
+            ]);
+        }
+    }
     public function followAppIndex()
     {
 
@@ -87,6 +98,62 @@ class GooglePlayController extends Controller
                     'released' => $released ,
                     'updated' => $updated
                 ]);
+
+        }
+        return response()->json(['success'=>'Thành công.']);
+    }
+    public function post_filter_app_list(Request $request){
+        dd($request->all());
+
+        $input_search = $request->input_search;
+        $gplay = new GPlayApps();
+        $existsApp = $gplay->existsApp($input_search);
+        if($existsApp){
+            $appInfo = $gplay->getAppInfo($input_search);
+            $screenshots = $appInfo->getScreenshots();
+            $url_screenshot = [];
+            foreach ($screenshots as $screenshot){
+                $url_screenshot[] = $screenshot->getUrl();
+            }
+            if($appInfo->getReleased() != null){
+                $released = $appInfo->getReleased()->getTimestamp();
+            }
+            if($appInfo->getUpdated() != null){
+                $updated = $appInfo->getUpdated()->getTimestamp();
+            }
+            $url_screenshot = json_encode($url_screenshot);
+            SaveTemp::updateOrCreate(
+                [
+                    'logo' => $appInfo->getIcon()->getUrl(),
+                    'appId' => $appInfo->getId(),
+                    'name' => $appInfo->getName(),
+                    'summary' => $appInfo->getSummary(),
+                    'developer' => json_encode($appInfo->getDeveloper()),
+                    'cover' => $appInfo->getCover(),
+                    'screenshots' =>$url_screenshot,
+                    'size' =>$appInfo->getSize(),
+                    'installs' => $appInfo->getInstalls(),
+                    'score' => $appInfo->getScore(),
+                    'numberVoters' => $appInfo->getNumberVoters(),
+                    'numberReviews' => $appInfo->getNumberReviews(),
+                    'offersIAPCost' => $appInfo->isContainsIAP(),
+                    'containsAds' => $appInfo->isContainsAds(),
+                    'released' => $released ,
+                    'updated' => $updated
+                ]);
+        }
+        dd(2);
+        $searchSuggests = $gplay->getSearchSuggestions($input_search);
+        foreach ($searchSuggests as $searchSuggest){
+            KeyWords::updateOrCreate(
+                [
+                    'keyword' =>$searchSuggest
+                ]
+            );
+        }
+        foreach ($appsInfo as $appInfo){
+            $appInfo =  $gplay->getAppInfo($appInfo->getId());
+
 
         }
         return response()->json(['success'=>'Thành công.']);
@@ -191,7 +258,7 @@ class GooglePlayController extends Controller
                 "installs" => number_format($record->installs),
                 "numberVoters" =>number_format($record->numberVoters),
                 "numberReviews" => number_format($record->numberReviews),
-                "score" => number_format($record->score,2),
+                "score" => number_format($record->score,1),
                 "action" => $action,
                 "cover" =>$record->cover,
                 "offersIAPCost" =>$record->offersIAPCost,
@@ -210,6 +277,116 @@ class GooglePlayController extends Controller
             "aaData" => $data_arr
         );
         echo json_encode($response);
+    }
+    public function get_filter_app_list(Request $request){
+       $draw = $request->get('draw');
+       $search_arr = $request->get('search');
+       $searchValue = $search_arr['value']; // Search value
+
+
+       // Total records
+       $totalRecords = 1;
+       $totalRecordswithFilter = 1;
+       // Fetch records
+        $data_arr = array();
+        $released = $updated = 'N/A';
+        if($searchValue != null){
+            $gplay = new GPlayApps();
+            $existsApp = $gplay->existsApp($searchValue);
+            if($existsApp) {
+                $check = AppsInfo::where('appId',$searchValue)->first();
+
+                $appInfo = $gplay->getAppInfo($searchValue);
+                $screenshots = $appInfo->getScreenshots();
+                $url_screenshot = [];
+                foreach ($screenshots as $screenshot) {
+                    $url_screenshot[] = $screenshot->getUrl();
+                }
+                if ($appInfo->getReleased() != null) {
+                    $released = $appInfo->getReleased()->format('d-m-Y');
+                }
+                if ($appInfo->getUpdated() != null) {
+                    $updated = $appInfo->getUpdated()->format('d-m-Y');
+                }
+                $note = '';
+                $action = '<div class="avatar avatar-status bg-light-primary">
+                                    <span class="avatar-content">
+                                        <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$appInfo->getId().'" class="btn-flat-primary showLink">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                        </a>
+                                    </span>
+                                </div>';
+                if($check != null){
+                    $note = $check->note;
+                    if($check->status == 1){
+                        $action .= ' <div class="avatar avatar-status bg-light-warning">
+                                    <span class="avatar-content">
+                                    <a href="javascript:void(0)" onclick="unfollowApp(\''.$check->appId.'\')" class="btn-flat-warning">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                    </a>
+                                    </span>
+                                </div>';
+                    }else{
+                        $action .= ' <div class="avatar avatar-status bg-light-secondary">
+                                    <span class="avatar-content">
+                                       <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$check->appId.'" class="btn-flat-secondary followApp">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
+                                    </a>
+                                </div>';
+                    }
+                    $action .= ' <div class="avatar avatar-status bg-light-info">
+                                 <span class="avatar-content">
+                                    <a href="../googleplay/detail?id='.$check->appId.'" target="_blank" class="btn-flat-info">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                    </a>
+                                </span>
+                             </div>';
+                }
+
+                else{
+                    $action .= ' <div class="avatar avatar-status bg-light-secondary">
+                                    <span class="avatar-content">
+                                    <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$appInfo->getId().'" class="btn-flat-secondary followApp">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
+                                    </a>
+                                </div>';
+                }
+                $data_arr[] = array(
+                    'logo' => $appInfo->getIcon()->getUrl(),
+                    'appId' => $appInfo->getId(),
+                    'name' => $appInfo->getName(),
+                    'summary' => $appInfo->getSummary(),
+                    'developer' => json_encode($appInfo->getDeveloper()),
+                    'cover' => $appInfo->getCover()->getUrl(),
+                    'screenshots' =>$url_screenshot,
+                    'size' =>$appInfo->getSize(),
+                    'installs' => number_format($appInfo->getInstalls()),
+                    'score' => number_format($appInfo->getScore(),1),
+                    'numberVoters' => number_format($appInfo->getNumberVoters()),
+                    'numberReviews' => number_format($appInfo->getNumberReviews()),
+                    'offersIAPCost' => $appInfo->isContainsIAP(),
+                    'containsAds' => $appInfo->isContainsAds(),
+                    'released' => $released ,
+                    'updated' => $updated,
+                    "idr" => '',
+                    "id" => $appInfo->getId(),
+                    "developer_url"=>$appInfo->getDeveloper()->getUrl(),
+                    "developer_name"=>$appInfo->getDeveloper()->getName(),
+                    "note" => $note,
+                    "action" => $action,
+                );
+            }
+        }
+       $response = array(
+           "draw" => intval($draw),
+           "iTotalRecords" => $totalRecords,
+           "iTotalDisplayRecords" => $totalRecordswithFilter,
+           "aaData" => $data_arr
+       );
+       echo json_encode($response);
+
+
+
     }
     public function getFollowAppIndex(Request $request){
         $draw = $request->get('draw');
@@ -363,6 +540,7 @@ class GooglePlayController extends Controller
         $infoReview = [];
         $data =[];
         $url_screenshot = [];
+
         foreach ($appsInfo as $appInfo){
             $data[]  = [
                 'date' => Carbon::now()->format('Y-m-d'),

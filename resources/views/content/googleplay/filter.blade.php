@@ -7,8 +7,6 @@
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/dataTables.bootstrap4.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/responsive.bootstrap4.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/buttons.bootstrap4.min.css')) }}">
-  <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/rowGroup.bootstrap4.min.css')) }}">
-  <link rel="stylesheet" href="{{ asset(mix('vendors/css/pickers/flatpickr/flatpickr.min.css')) }}">
   <link rel="stylesheet" href="{{ asset(mix('vendors/css/extensions/swiper.min.css')) }}">
   <link rel="stylesheet" href="{{asset('vendors/css/extensions/toastr.min.css')}}">
 
@@ -35,23 +33,6 @@
   <!-- Modal -->
 @include('content.googleplay.modal')
 
-  <section id="feather-icons">
-    <div class="row">
-      <div class="col-12">
-        <div class="icon-search-wrapper my-3 mx-auto">
-          <form id="searchAppForm" name="searchAppForm">
-            <div class="form-group input-group input-group-merge">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i data-feather="search"></i></span>
-              </div>
-              <input type="text" class="form-control" id="input_search" name="input_search" placeholder="Search Apps..." />
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div class="d-flex flex-wrap" id="icons-container"></div>
-  </section>
   <section id="basic-datatable">
     <div class="row">
       <div class="col-12">
@@ -62,8 +43,6 @@
               <table class="datatables-basic table">
                 <thead>
                 <tr>
-                  <th></th>
-                  <th></th>
                   <th>AppID</th>
                   <th style="width: 310px">Logo</th>
                   <th style="width: 310px">Summary</th>
@@ -73,15 +52,10 @@
                   <th>Reviews</th>
                   <th>Score</th>
                   <th>Note</th>
-                  <th>Action</th>
+                  <th>action</th>
                 </tr>
                 </thead>
               </table>
-              <div class="row">
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
-                </div>
-              </div>
             </form>
           </div>
         </div>
@@ -98,15 +72,6 @@
   <script src="{{ asset(mix('vendors/js/tables/datatable/datatables.bootstrap4.min.js')) }}"></script>
   <script src="{{ asset(mix('vendors/js/tables/datatable/dataTables.responsive.min.js')) }}"></script>
   <script src="{{ asset(mix('vendors/js/tables/datatable/responsive.bootstrap4.js')) }}"></script>
-  <script src="{{ asset(mix('vendors/js/tables/datatable/datatables.checkboxes.min.js')) }}"></script>
-  <script src="{{ asset(mix('vendors/js/tables/datatable/datatables.buttons.min.js')) }}"></script>
-  <script src="{{ asset(mix('vendors/js/tables/datatable/jszip.min.js')) }}"></script>
-  <script src="{{ asset(mix('vendors/js/tables/datatable/pdfmake.min.js')) }}"></script>
-  <script src="{{ asset(mix('vendors/js/tables/datatable/vfs_fonts.js')) }}"></script>
-  <script src="{{ asset(mix('vendors/js/tables/datatable/buttons.html5.min.js')) }}"></script>
-  <script src="{{ asset(mix('vendors/js/tables/datatable/buttons.print.min.js')) }}"></script>
-  <script src="{{ asset(mix('vendors/js/tables/datatable/dataTables.rowGroup.min.js')) }}"></script>
-  <script src="{{ asset(mix('vendors/js/pickers/flatpickr/flatpickr.min.js')) }}"></script>
   <script src="{{ asset(mix('vendors/js/extensions/swiper.min.js')) }}"></script>
   <script src="{{asset('vendors/js/extensions/toastr.min.js')}}"></script>
 
@@ -116,14 +81,13 @@
   <script src="{{ asset(mix('vendors/js/extensions/sweetalert2.all.min.js')) }}"></script>
   <script src="{{ asset(('js/scripts/googleplay/clipboard.js')) }}"></script>
 
-
-
   <script type="text/javascript">
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+
     var swiper =  new Swiper('.swiper-responsive-breakpoints', {
       slidesPerView: 'auto',
       loop:true,
@@ -136,17 +100,13 @@
       },
     });
     var table = $('.datatables-basic').DataTable({
-      displayLength: 250,
-      lengthMenu: [20,50, 100, 250, 500],
       serverSide: true,
       processing: false,
       ajax: {
-        url: "{{route('googleplay-get-index')}}",
+        url: "{{route('googleplay-get-filter-app-list')}}",
         type: "post",
       },
       columns: [
-        { data: 'idr' },
-        { data: 'id' },
         { data: 'appId' },
         { data: 'logo' }, // used for sorting so will hide this column
         { data: 'summary' },
@@ -156,46 +116,11 @@
         { data: 'numberReviews' },
         { data: 'score' },
         { data: 'note',className: "change-note" },
-        { data: 'action',className: "text-center" },
+        { data: 'action',className: "text-center" }
       ],
       columnDefs: [
-        // {
-        //   targets: [10],
-        //   createdCell: createdCell
-        // },
         {
-          // For Responsive
-          className: 'control',
-          orderable: false,
-          responsivePriority: 0,
-          targets: 0
-        },
-        {
-          // For Checkboxes
           targets: 1,
-          orderable: false,
-          responsivePriority: 2,
-          render: function (data, type, full, meta) {
-            return (
-                    '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="'+full.appId+'" name="checkbox[]" id="checkbox' +
-                    data +
-                    '" /><label class="custom-control-label" for="checkbox' +
-                    data +
-                    '"></label></div>'
-            );
-          },
-          checkboxes: {
-            selectAllRender:
-                    '<div class="custom-control custom-checkbox"> <input class="custom-control-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="custom-control-label" for="checkboxSelectAll"></label></div>'
-          }
-        },
-        {
-          orderable: false,
-          targets: [2],
-          visible: false,
-        },
-        {
-          targets: 3,
           responsivePriority: 1,
           render: function (data, type, full, meta) {
             // Creates full output for row
@@ -211,7 +136,7 @@
           }
         },
         {
-          targets: 4,
+          targets: 2,
           responsivePriority: 1,
           render: function (data, type, full, meta) {
             // Creates full output for row
@@ -222,7 +147,7 @@
           }
         },
         {
-          targets: [5],
+          targets: [3],
           responsivePriority: 3,
           render: function (data, type, full, meta) {
             if(full.containsAds == 1){
@@ -245,61 +170,9 @@
         },
 
       ],
-      order: [[6, 'desc']],
 
       dom:
               '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-      buttons: [
-        {
-          extend: 'collection',
-          className: 'btn btn-outline-secondary dropdown-toggle mr-2',
-          text: feather.icons['share'].toSvg({ class: 'font-small-4 mr-50' }) + 'Export',
-          buttons: [
-            {
-              extend: 'print',
-              charset: 'UTF-8',
-              text: feather.icons['printer'].toSvg({ class: 'font-small-4 mr-50' }) + 'Print',
-              className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
-            },
-            {
-              extend: 'csv',
-              charset: 'UTF-8',
-              text: feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) + 'Csv',
-              className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
-            },
-            {
-              extend: 'excel',
-              charset: 'UTF-8',
-              text: feather.icons['file'].toSvg({ class: 'font-small-4 mr-50' }) + 'Excel',
-              className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
-            },
-            {
-              extend: 'pdf',
-              charset: 'UTF-8',
-              text: feather.icons['clipboard'].toSvg({ class: 'font-small-4 mr-50' }) + 'Pdf',
-              className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
-            },
-            {
-              extend: 'copy',
-              charset: 'UTF-8',
-              text: feather.icons['copy'].toSvg({ class: 'font-small-4 mr-50' }) + 'Copy',
-              className: 'dropdown-item',
-              exportOptions: { columns: [2, 4, 5, 6, 7, 8, 9] }
-            }
-          ],
-          init: function (api, node, config) {
-            $(node).removeClass('btn-secondary');
-            $(node).parent().removeClass('btn-group');
-            setTimeout(function () {
-              $(node).closest('.dt-buttons').removeClass('btn-group').addClass('d-inline-flex');
-            }, 50);
-          }
-        },
-      ],
       responsive: {
         details: {
           display: $.fn.dataTable.Responsive.display.modal({
@@ -344,7 +217,7 @@
         loadingIndicator: true
       },
     });
-    table.on('click', 'td:nth-child(10)', e=> {
+    table.on('click', '.change-note', e=> {
       e.preventDefault();
       const row = table.row(e.target.closest('tr'));
       const rowData = row.data();
@@ -402,11 +275,11 @@
       $('.modal').modal('hide');
 
     });
-    $('#searchAppForm').on('submit',function (event){
+    $('#searchFilterAppForm').on('submit',function (event){
       event.preventDefault();
       $.ajax({
-        data: $('#searchAppForm').serialize(),
-        url: "{{ route('googleplay-post-index') }}",
+        data: $('#searchFilterAppForm').serialize(),
+        url: "{{ route('googleplay-post-filter-app') }}",
         type: "POST",
         dataType: 'json',
         success: function (data) {
@@ -428,25 +301,6 @@
         },
       });
     });
-    $(document)
-            .ajaxStart(function () {
-              $.blockUI({
-                message:
-                        '<div class="d-flex justify-content-center align-items-center"><p class="mr-50 mb-0">Please wait...</p> <div class="spinner-grow spinner-grow-sm text-white" role="status"></div> </div>',
-
-                css: {
-                  backgroundColor: 'transparent',
-                  color: '#fff',
-                  border: '0'
-                },
-                overlayCSS: {
-                  opacity: 0.5
-                }
-              });
-            })
-            .ajaxStop(function () {
-              $.unblockUI();
-            });
     function unfollowApp(id) {
       $.get('{{asset('googleplay/unfollowApp')}}?id='+id,function (data)
       {
@@ -458,5 +312,7 @@
 
 
   </script>
+
+
 @endsection
 
