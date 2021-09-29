@@ -159,10 +159,7 @@
         { data: 'action',className: "text-center" },
       ],
       columnDefs: [
-        // {
-        //   targets: [10],
-        //   createdCell: createdCell
-        // },
+        { orderable: false, targets: [10,11] },
         {
           // For Responsive
           className: 'control',
