@@ -134,7 +134,7 @@ class AppGalleryController extends Controller
 
     function searchKey($key) {
 //        $ch = curl_init("https://web-dra.hispace.dbankcloud.cn/uowap/index?method=internal.getTabDetail&serviceType=20&reqPageNum=1&uri=searchApp|".$key."&maxResults=30&version=10.0.0&zone=&locale=en");
-        $ch = curl_init("https://web-dra.hispace.dbankcloud.cn/uowap/index?method=internal.getTabDetail&serviceType=20&reqPageNum=1&uri=searchApp%7C".$key."&maxResults=25&version=10.0.0&zone=&locale=vi");
+        $ch = curl_init("https://web-dra.hispace.dbankcloud.cn/uowap/index?method=internal.getTabDetail&serviceType=20&reqPageNum=1&uri=searchApp%7C".$key."&maxResults=25&version=10.0.0&zone=&locale=en");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         $data = curl_exec($ch);
