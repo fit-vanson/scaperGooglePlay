@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppGalleryController;
 use App\Http\Controllers\GooglePlayController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
@@ -51,7 +52,25 @@ Route::group(['prefix' => 'googleplay'], function () {
     Route::get('/detail', [GooglePlayController::class,'detailApp'])->name('googleplay-detailApp');
     Route::get('/detail-ajax', [GooglePlayController::class,'detailApp_Ajax'])->name('googleplay-detailApp-Ajax');
     Route::POST('/change-note', [GooglePlayController::class,'changeNote'])->name('googleplay-change-note');
+});
 
+Route::group(['prefix' => 'appgallery'], function () {
+    Route::get('/', [AppGalleryController::class,'index'])->name('appgallery-index');
+    Route::get('/follow-app', [AppGalleryController::class,'followAppIndex'])->name('appgallery-follow-app');
+    Route::get('/package', [AppGalleryController::class,'package'])->name('appgallery-package');
+    Route::get('/filter_app_list', [AppGalleryController::class,'filter_app_list'])->name('appgallery-filter-app-list');
+    Route::post('/get-filter_app_list', [AppGalleryController::class,'get_filter_app_list'])->name('appgallery-get-filter-app-list');
+    Route::post('/post-filter_app_list', [AppGalleryController::class,'post_filter_app_list'])->name('appgallery-post-filter-app');
+    Route::post('/getIndex', [AppGalleryController::class,'getIndex'])->name('appgallery-get-index');
+    Route::post('/getfollowAppIndex', [AppGalleryController::class,'getFollowAppIndex'])->name('appgallery-get-follow-appIndex');
+    Route::get('/post', [AppGalleryController::class,'postIndex'])->name('appgallery-post-index');
+    Route::get('/cron', [AppGalleryController::class,'cronApps'])->name('appgallery-cron-apps');
+    Route::post('/followApp', [AppGalleryController::class,'followApp'])->name('appgallery-followApp');
+    Route::post('/chooseApp', [AppGalleryController::class,'chooseApp'])->name('appgallery-chooseApp');
+    Route::get('/unfollowApp', [AppGalleryController::class,'unfollowApp'])->name('appgallery-unfollowApp');
+    Route::get('/detail', [AppGalleryController::class,'detailApp'])->name('appgallery-detailApp');
+    Route::get('/detail-ajax', [AppGalleryController::class,'detailApp_Ajax'])->name('appgallery-detailApp-Ajax');
+    Route::POST('/change-note', [AppGalleryController::class,'changeNote'])->name('appgallery-change-note');
 });
 // locale Route
 Route::get('lang/{locale}', [LanguageController::class, 'swap']);

@@ -51,6 +51,22 @@
           "slug": "googleplay-filter-app-list"
         }
       ]
+    },
+    {
+      "url": "googleplay/",
+      "name": "App Gallery",
+      "icon": "aperture",
+      "slug": "",
+      "submenu": [
+
+        {
+          "url": "appgallery/package",
+          "name": "Filter App",
+          "icon": "circle",
+          "slug": "appgallery-package"
+        }
+
+      ]
     }
 
   ]
