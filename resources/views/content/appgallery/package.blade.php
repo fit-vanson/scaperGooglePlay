@@ -211,9 +211,9 @@
           responsivePriority: 1,
           render: function (data, type, full, meta) {
             // Creates full output for row
-            var $row_output = '<a target="_blank" href='+full.developer_url +' ><span class="emp_name text-wrap width-300 text-truncate font-weight-bold" style="color: #517f40">' +full.developer +'</span></a>'+
-                    '<p class="emp_name">' +full.summary +'</p>'+
-                    '<p class="emp_name">Released: ' +full.released +'</p>';
+            var $row_output = '<span class="emp_name text-wrap width-300 text-truncate font-weight-bold" style="color: #517f40">' +full.summary +'</span>'+
+                    '<p class="emp_name">Released: ' +full.released +'</p>'+
+                    '<p class="emp_name" style="color: rgba(231,130,130,0.77)">' +full.developer +'</p>';
             return  "<div class='text-wrap width-300'>" + $row_output + "</div>";
           }
         },

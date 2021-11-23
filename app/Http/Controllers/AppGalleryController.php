@@ -63,41 +63,6 @@ class AppGalleryController extends Controller
                                         </a>
                                     </span>
                                 </div>';
-//            if($record->checkExist != null){
-//                $note = $record->checkExist->note;
-//                if($record->checkExist->status == 1){
-//                    $action .= ' <div class="avatar avatar-status bg-light-warning">
-//                                    <span class="avatar-content">
-//                                    <a href="javascript:void(0)" onclick="unfollowApp(\''.$record->appId.'\')" class="btn-flat-warning">
-//                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-//                                    </a>
-//                                    </span>
-//                                </div>';
-//                }else{
-//                    $action .= ' <div class="avatar avatar-status bg-light-secondary">
-//                                    <span class="avatar-content">
-//                                       <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-secondary followApp">
-//                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
-//                                    </a>
-//                                </div>';
-//                }
-//                $action .= ' <div class="avatar avatar-status bg-light-info">
-//                                 <span class="avatar-content">
-//                                    <a href="../googleplay/detail?id='.$record->appId.'" target="_blank" class="btn-flat-info">
-//                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-//                                    </a>
-//                                </span>
-//                             </div>';
-//            }
-//
-//            else{
-//                $action .= ' <div class="avatar avatar-status bg-light-secondary">
-//                                    <span class="avatar-content">
-//                                    <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$record->appId.'" class="btn-flat-secondary followApp">
-//                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> </span>
-//                                    </a>
-//                                </div>';
-//            }
             if($record->released != null){
                 $released = $record->released;
             }else{
@@ -168,7 +133,8 @@ class AppGalleryController extends Controller
     }
 
     function searchKey($key) {
-        $ch = curl_init("https://web-dra.hispace.dbankcloud.cn/uowap/index?method=internal.getTabDetail&serviceType=20&reqPageNum=1&uri=searchApp|".$key."&maxResults=30&version=10.0.0&zone=&locale=en");
+//        $ch = curl_init("https://web-dra.hispace.dbankcloud.cn/uowap/index?method=internal.getTabDetail&serviceType=20&reqPageNum=1&uri=searchApp|".$key."&maxResults=30&version=10.0.0&zone=&locale=en");
+        $ch = curl_init("https://web-dra.hispace.dbankcloud.cn/uowap/index?method=internal.getTabDetail&serviceType=20&reqPageNum=1&uri=searchApp%7C".$key."&maxResults=25&version=10.0.0&zone=&locale=vi");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         $data = curl_exec($ch);
