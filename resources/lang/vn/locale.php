@@ -5,6 +5,7 @@ return [
     'Analytics' => 'Analytics',
     'Market' => 'Cửa hàng',
     'Google Play' => 'CH-Play',
+    'App Gallery' => 'App Gallery',
     'Detail' => 'Chi tiết',
     'Package' => 'Package',
     'Follow App' => 'Follow App',
