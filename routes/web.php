@@ -71,6 +71,7 @@ Route::group(['prefix' => 'appgallery'], function () {
     Route::get('/detail', [AppGalleryController::class,'detailApp'])->name('appgallery-detailApp');
     Route::get('/detail-ajax', [AppGalleryController::class,'detailApp_Ajax'])->name('appgallery-detailApp-Ajax');
     Route::POST('/change-note', [AppGalleryController::class,'changeNote'])->name('appgallery-change-note');
+    Route::post('/download-app', [AppGalleryController::class,'downloadApp'])->name('appgallery-download-app');
 });
 // locale Route
 Route::get('lang/{locale}', [LanguageController::class, 'swap']);

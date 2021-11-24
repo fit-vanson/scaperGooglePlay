@@ -6,6 +6,7 @@ use App\Models\AppGallery;
 use App\Models\KeyWords;
 use App\Models\SaveTemp;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Nelexa\GPlay\GPlayApps;
 
 class AppGalleryController extends Controller
@@ -167,9 +168,27 @@ class AppGalleryController extends Controller
     public function chooseApp(Request $request)
     {
         $appsChoose = $request->checkbox;
+        $appID =  AppGallery::whereIn('appId',$appsChoose)->get();
+        foreach ($appID as $app){
+            $appIDs[] = $app->appId;
+            $names[] = $app->name;
+        }
+        $apps = array_combine($appIDs,$names);
         return view('content.appgallery.choose',[
-            'appsChoose' => $appsChoose
+            'appsChoose' => $apps
         ]);
+    }
+
+    public function downloadApp(Request $request){
+        $appID = explode(',',$request->appID);
+        $appID =  AppGallery::whereIn('appId',$appID)->get();
+        foreach ($appID as $app){
+           $links[] = $app->downurl;
+            $appIDs[] = $app->appId;
+        }
+        $apps = array_combine($appIDs,$links);
+
+        return response()->json($apps);
     }
 
 }

@@ -340,18 +340,7 @@
         loadingIndicator: true
       },
     });
-    // table.on('click', 'td:nth-child(10)', e=> {
-    //   e.preventDefault();
-    //   const row = table.row(e.target.closest('tr'));
-    //   const rowData = row.data();
-    //   $('#modelHeading').html(rowData.name);
-    //   $('#id').val(rowData.appId);
-    //   $('#note').val(rowData.note);
-    //   $('#myModal').modal('show');
-    //   $('.input_screenshot_img').hide();
-    //   $('.input_note').show();
-    //   $('.modal-dialog').prop('class','modal-dialog modal-xm')
-    // });
+
     table.on('click', '.banner_click', e=> {
       e.preventDefault();
       const row = table.row(e.target.closest('tr'));
@@ -373,31 +362,6 @@
       });
     });
     $('div.head-label').html('<h6 class="mb-0">Tìm kiếm Ứng dụng</h6>');
-    {{--$(document).on('click','.followApp', function (data) {--}}
-    {{--  const row = table.row(data.target.closest('tr'));--}}
-    {{--  const rowData = row.data();--}}
-    {{--  $.post('{{asset('googleplay/followApp')}}?id='+rowData.appId,function (data)--}}
-    {{--  {--}}
-    {{--    $('.modal').modal('hide');--}}
-    {{--    toastr['success']('Theo dõi thành công!');--}}
-    {{--    table.draw();--}}
-    {{--  })--}}
-    {{--});--}}
-    {{--$(document).on('click','.showLink', function (data) {--}}
-    {{--  const row = table.row(data.target.closest('tr'));--}}
-    {{--  const rowData = row.data();--}}
-    {{--  let a = '';--}}
-    {{--  rowData.screenshots.forEach(function(item, index, array) {--}}
-    {{--    a +=  item + '=w2560-h1297-rw'+ '\n\n'--}}
-    {{--  })--}}
-    {{--  $('#copy-icon-input').val(rowData.logo);--}}
-    {{--  $('#copy-banner-input').val(rowData.cover+ '=w2560-h1297-rw');--}}
-    {{--  $('#copy-preview-input').val(a);--}}
-    {{--  $('#modelHeading').html(rowData.name);--}}
-    {{--  $('#modal_link').modal('show');--}}
-    {{--  $('.modal').modal('hide');--}}
-
-    {{--});--}}
     $('#searchAppForm').on('submit',function (event){
       event.preventDefault();
       $.ajax({
@@ -410,20 +374,6 @@
         },
       });
     });
-    {{--$('#change_note').on('submit',function (event){--}}
-    {{--  event.preventDefault();--}}
-    {{--  $.ajax({--}}
-    {{--    data: $('#change_note').serialize(),--}}
-    {{--    url: "{{ route('googleplay-change-note') }}",--}}
-    {{--    type: "POST",--}}
-    {{--    dataType: 'json',--}}
-    {{--    success: function (data) {--}}
-    {{--      $('#myModal').modal('hide');--}}
-    {{--      toastr['success']('Thành công!');--}}
-    {{--      table.draw();--}}
-    {{--    },--}}
-    {{--  });--}}
-    {{--});--}}
     $(document)
             .ajaxStart(function () {
               $.blockUI({
