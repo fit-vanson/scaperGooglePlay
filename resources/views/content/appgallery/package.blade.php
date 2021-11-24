@@ -172,7 +172,7 @@
           render: function (data, type, full, meta) {
 
             return (
-                    '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="'+full.package+'" name="checkbox[]" id="checkbox' +
+                    '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="'+full.appId+'" name="checkbox[]" id="checkbox' +
                     data +
                     '" /><label class="custom-control-label" for="checkbox' +
                     data +
