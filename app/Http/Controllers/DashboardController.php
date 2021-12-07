@@ -142,12 +142,22 @@ class DashboardController extends Controller
                 if($setTime > 0){
                     $percent = $result/$setTime * 100;
                 }
+
+
                 $arr_app[] =[
                     'appId' => $app->appId,
                     'icon' => $app->logo,
                     'name' => $app->name,
                     'result'=> $result,
                     'percent' =>$percent
+                ];
+            }else{
+                $arr_app[] =[
+                    'appId' => $app->appId,
+                    'icon' => $app->logo,
+                    'name' => $app->name,
+                    'result'=> 0,
+                    'percent' =>0
                 ];
             }
         }
