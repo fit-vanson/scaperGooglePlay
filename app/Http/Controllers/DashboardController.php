@@ -32,7 +32,7 @@ class DashboardController extends Controller
       $totalAppFollow = AppsInfo::where('status', '=',1)->count();
       $pageConfigs = ['pageHeader' => false];
       $topApps = $this->getTopApps();
-      $Categories = $this->getCategories();
+    //  $Categories = $this->getCategories();
       $topGrowths = $this->getTopGrowths(7,'installs',5);
 
     return view('/content/dashboard/dashboard-analytics', [
