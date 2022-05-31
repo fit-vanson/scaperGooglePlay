@@ -37,7 +37,7 @@ class DashboardController extends Controller
 
     return view('/content/dashboard/dashboard-analytics', [
         'pageConfigs' => $pageConfigs,
-        'Categories' =>$Categories,
+       // 'Categories' =>$Categories,
         'topApps' =>$topApps,
         'totalAppFollow' =>$totalAppFollow,
         'topGrowths' =>$topGrowths
