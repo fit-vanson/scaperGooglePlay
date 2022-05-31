@@ -111,6 +111,7 @@ class DashboardController extends Controller
   }
   public function getTopApps($category = null){
       $gplay = new GPlayApps();
+      $arr_app = [];
       $topApps = $gplay->getTopApps($category,null,5);
       foreach ($topApps as $app){
           $arr_app[] = [
