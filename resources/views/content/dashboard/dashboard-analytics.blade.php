@@ -88,9 +88,9 @@
           <div class="col-lg-5">
             <select class="select2-size-sm form-control" id="select_category" onchange="chooseCategory()">
               <option>All</option>
-              @foreach($Categories as $Category)
-                <option value="{{$Category['id']}}">{{$Category['name']}}</option>
-              @endforeach
+{{-- @foreach($Categories as $Category)--}}
+{{-- <option value="{{$Category['id']}}">{{$Category['name']}}</option>--}}
+{{--  @endforeach--}}
             </select>
           </div>
         </div>
